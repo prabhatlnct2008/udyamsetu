@@ -21,7 +21,7 @@ A modern, responsive landing page for UdyamSetu Growth Studio built with Next.js
 ## Project Structure
 
 ```
-landing/
+udyamsetu/
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx          # English landing page (main)
@@ -64,7 +64,7 @@ landing/
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd landing
+cd udyamsetu
 ```
 
 2. Install dependencies:
@@ -102,7 +102,6 @@ pnpm dev
 
 3. **Configure Project**
    - Framework Preset: Next.js (auto-detected)
-   - Root Directory: `landing` (if this is in a subdirectory)
    - Build Command: `npm run build` (default)
    - Output Directory: `.next` (default)
 
@@ -125,7 +124,6 @@ vercel login
 
 3. **Deploy from project directory**
 ```bash
-cd landing
 vercel
 ```
 
