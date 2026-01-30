@@ -530,7 +530,7 @@ export default function HinglishHome() {
           </ul>
 
           <a
-            href="https://wa.me/919999999999?text=PLAN"
+            href="https://wa.me/918882567801?text=PLAN"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-10 inline-flex items-center gap-3 bg-[#FF8A00] hover:bg-[#F57C00] text-white px-10 py-5 rounded-xl font-bold text-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-1 font-[family-name:var(--font-mukta)]"

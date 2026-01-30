@@ -4,7 +4,7 @@ interface CTAButtonsProps {
 }
 
 export default function CTAButtons({ isHinglish = false, size = 'normal' }: CTAButtonsProps) {
-  const whatsappLink = 'https://wa.me/919999999999?text=PLAN';
+  const whatsappLink = 'https://wa.me/918882567801?text=PLAN';
 
   const primaryText = isHinglish
     ? 'WhatsApp पर "PLAN" भेजो'

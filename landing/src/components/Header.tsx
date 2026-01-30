@@ -15,19 +15,19 @@ export default function Header({ isHinglish = false }: HeaderProps) {
         { label: 'समाधान', href: '#modules' },
         { label: 'पैकेज', href: '#packages' },
         { label: 'कैसे काम करता है', href: '#how-it-works' },
-        { label: 'रिपोर्टिंग', href: '#reporting' },
+        { label: 'पोर्टफोलियो', href: '/portfolio' },
         { label: 'FAQs', href: '#faqs' },
       ]
     : [
         { label: 'Solutions', href: '#modules' },
         { label: 'Packages', href: '#packages' },
         { label: 'How it Works', href: '#how-it-works' },
-        { label: 'Results', href: '#reporting' },
+        { label: 'Portfolio', href: '/portfolio' },
         { label: 'FAQs', href: '#faqs' },
       ];
 
   const ctaText = isHinglish ? 'WhatsApp पर फ्री प्लान' : 'WhatsApp Free Plan';
-  const whatsappLink = 'https://wa.me/919999999999?text=PLAN';
+  const whatsappLink = 'https://wa.me/918882567801?text=PLAN';
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#E9D8C3] shadow-sm">

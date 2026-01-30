@@ -5,3 +5,4 @@ export { default as SectionCard } from './SectionCard';
 export { default as ModuleCard } from './ModuleCard';
 export { default as PackageCard } from './PackageCard';
 export { default as FAQ } from './FAQ';
+export { default as ProjectCard } from './ProjectCard';
