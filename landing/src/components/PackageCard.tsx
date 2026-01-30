@@ -96,7 +96,7 @@ export default function PackageCard({
         </div>
 
         <a
-          href="https://wa.me/919999999999?text=PLAN"
+          href="https://wa.me/918882567801?text=PLAN"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 w-full bg-[#FF8A00] hover:bg-[#F57C00] text-white py-3 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2"
