@@ -316,3 +316,21 @@ export const FAQ_GROUPS: FaqGroup[] = [
 
 export const getAllFaqItems = (): FaqItem[] =>
   FAQ_GROUPS.flatMap((g) => g.items);
+
+function getFaqItem(groupId: string, index: number): FaqItem {
+  const group = FAQ_GROUPS.find((g) => g.id === groupId);
+  if (!group) throw new Error(`Unknown FAQ group: ${groupId}`);
+  const item = group.items[index];
+  if (!item) throw new Error(`Unknown FAQ item: ${groupId}[${index}]`);
+  return item;
+}
+
+// Five questions chosen to span Lead Gen, Local SEO, AI, and Trust + Growth
+// — used as the homepage FAQ teaser that links into /faqs for the full set.
+export const FEATURED_FAQ_ITEMS: FaqItem[] = [
+  getFaqItem('lead-generation', 0),  // What is a qualified lead?
+  getFaqItem('local-seo', 0),        // How do I appear on Google Maps for "near me" searches?
+  getFaqItem('lead-generation', 8),  // How quickly should I respond to a lead?
+  getFaqItem('ai-automation', 0),    // What is AI automation in simple words?
+  getFaqItem('trust-growth', 2),     // What should I do in the first 30 days?
+];
