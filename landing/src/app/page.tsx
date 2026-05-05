@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { Header, Footer, CTAButtons, ModuleCard, PackageCard, FAQ } from '@/components';
 import SouthDelhiHubSection from '@/components/southDelhi/SouthDelhiHubSection';
+import { FEATURED_FAQ_ITEMS } from '@/content/faqs';
 
 export default function Home() {
   return (
@@ -473,31 +475,25 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
-              FAQs
+              Frequently asked questions
             </h2>
+            <p className="mt-3 text-[#1A1A1A]/70">
+              A few common questions South Delhi business owners ask us. The full library has 50.
+            </p>
           </div>
 
           <div className="max-w-3xl mx-auto">
-            <FAQ
-              items={[
-                {
-                  question: 'Do you guarantee rankings?',
-                  answer: 'No. We guarantee deliverables and best practices. Rankings depend on competition.',
-                },
-                {
-                  question: 'Can brand mention posting be fully automated?',
-                  answer: 'Not safely. We automate discovery + drafting + tracking, and keep approval for posting.',
-                },
-                {
-                  question: 'Can backlinks be automated?',
-                  answer: 'Prospecting + outreach + monitoring can be automated. Link acquisition is earned, not spammed.',
-                },
-                {
-                  question: 'Do you reply to customers manually?',
-                  answer: 'We set automation + templates. Your team closes leads.',
-                },
-              ]}
-            />
+            <FAQ items={FEATURED_FAQ_ITEMS} />
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/faqs"
+              className="inline-flex items-center gap-2 border-2 border-[#1F2A6D] text-[#1F2A6D] hover:bg-[#EEF1FF] px-6 py-3 rounded-xl font-semibold transition-all duration-200"
+            >
+              <span>See all 50 FAQs</span>
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -527,6 +523,31 @@ export default function Home() {
             <WhatsAppLargeIcon />
             <span>WhatsApp &quot;PLAN&quot; to Get Started</span>
           </a>
+        </div>
+      </section>
+
+      {/* FAQ teaser banner (links to full /faqs page) */}
+      <section className="py-12 md:py-16 bg-[#FFF6E8] border-t border-[#E9D8C3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              Still have questions?
+            </h2>
+            <p className="mt-3 text-[#1A1A1A]/80">
+              50 practical answers for South Delhi businesses — websites,
+              local SEO, Google Business Profile, lead generation, WhatsApp
+              follow-up, AI automation, and growth.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Link
+                href="/faqs"
+                className="inline-flex items-center gap-2 bg-[#1F2A6D] hover:bg-[#2a3580] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+              >
+                <span>Browse all 50 FAQs</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
