@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Header, Footer, CTAButtons, ModuleCard, PackageCard, FAQ } from '@/components';
+import SouthDelhiHubSection from '@/components/southDelhi/SouthDelhiHubSection';
 
 export const metadata: Metadata = {
   title: 'UdyamSetu Growth Studio - अपने बिज़नेस को Lead Machine बनाइए',
@@ -231,6 +232,8 @@ export default function HinglishHome() {
           </div>
         </div>
       </section>
+
+      <SouthDelhiHubSection isHinglish />
 
       {/* Packages Section */}
       <section id="packages" className="py-16 md:py-20 bg-white">

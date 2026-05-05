@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SOUTH_DELHI_PAGES } from '@/content/southDelhi/shared';
 
 interface FooterProps {
   isHinglish?: boolean;
@@ -77,6 +78,24 @@ export default function Footer({ isHinglish = false }: FooterProps) {
               </li>
             </ul>
           </div>
+        </div>
+
+        <div className="mt-10 pt-8 border-t border-white/20">
+          <h4 className="font-semibold mb-4 font-[family-name:var(--font-poppins)]">
+            {isHinglish ? 'South Delhi Pages' : 'South Delhi Pages'}
+          </h4>
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2 text-sm">
+            {SOUTH_DELHI_PAGES.map((p) => (
+              <li key={p.slug}>
+                <Link
+                  href={`/${p.slug}`}
+                  className="text-white/75 hover:text-[#FF8A00] transition-colors"
+                >
+                  {p.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
