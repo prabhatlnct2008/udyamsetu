@@ -1,4 +1,5 @@
 import { Header, Footer, CTAButtons, ModuleCard, PackageCard, FAQ } from '@/components';
+import SouthDelhiHubSection from '@/components/southDelhi/SouthDelhiHubSection';
 
 export default function Home() {
   return (
@@ -216,6 +217,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <SouthDelhiHubSection />
 
       {/* Packages Section */}
       <section id="packages" className="py-16 md:py-20 bg-white">

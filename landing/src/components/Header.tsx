@@ -13,15 +13,15 @@ export default function Header({ isHinglish = false }: HeaderProps) {
   const navItems = isHinglish
     ? [
         { label: 'समाधान', href: '#modules' },
+        { label: 'South Delhi', href: '/#south-delhi' },
         { label: 'पैकेज', href: '#packages' },
-        { label: 'कैसे काम करता है', href: '#how-it-works' },
         { label: 'पोर्टफोलियो', href: '/portfolio' },
         { label: 'FAQs', href: '#faqs' },
       ]
     : [
         { label: 'Solutions', href: '#modules' },
+        { label: 'South Delhi', href: '/#south-delhi' },
         { label: 'Packages', href: '#packages' },
-        { label: 'How it Works', href: '#how-it-works' },
         { label: 'Portfolio', href: '/portfolio' },
         { label: 'FAQs', href: '#faqs' },
       ];
