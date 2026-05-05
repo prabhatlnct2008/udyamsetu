@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "UdyamSetu Growth Studio - Turn Your Business Into a Lead Machine",
   description: "We build a complete growth system for Indian businesses: 30–100 local landing pages + SEO foundation + safe brand mention engine + backlinks/citations + Meta ads experiments + WhatsApp auto-replies",
   keywords: "UdyamSetu, lead generation, Indian business, SMB marketing, WhatsApp automation, SEO, landing pages",
+  verification: {
+    google: "6GWyM8Oi2hONRnhS7Jm6xm991c7xiTL5aiqL6Eb5RbY",
+  },
 };
 
 export default function RootLayout({
