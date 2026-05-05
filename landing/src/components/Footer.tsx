@@ -13,12 +13,14 @@ export default function Footer({ isHinglish = false }: FooterProps) {
   const links = isHinglish
     ? [
         { label: 'Portfolio', href: '/portfolio' },
+        { label: 'FAQs', href: '/faqs' },
         { label: 'Privacy', href: '/privacy' },
         { label: 'Terms', href: '/terms' },
         { label: 'Contact', href: '#contact' },
       ]
     : [
         { label: 'Portfolio', href: '/portfolio' },
+        { label: 'FAQs', href: '/faqs' },
         { label: 'Privacy', href: '/privacy' },
         { label: 'Terms', href: '/terms' },
         { label: 'Contact', href: '#contact' },
