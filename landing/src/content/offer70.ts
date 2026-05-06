@@ -1,5 +1,5 @@
 export const OFFER_SLUG = '70-discount-offering';
-export const PROPOSAL_PDF_PATH = '/guides/proposal.pdf';
+export const PROPOSAL_PDF_PATH = '/guides/UdyamSetu_AI_Complete_Proposal.pdf';
 
 export const WHATSAPP_PRESET_TEXT =
   'Hi UdyamSetu, I saw the ₹6,000 launch offer and want to know more.';
