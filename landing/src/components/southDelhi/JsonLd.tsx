@@ -22,7 +22,7 @@ export default function JsonLd({ content }: Props) {
       '@id': PROFESSIONAL_SERVICE_NODE_ID,
       name: 'UdyamSetu Growth Studio',
       url: `${SITE_ORIGIN}/`,
-      telephone: '+91-8882567801',
+      telephone: '+918882567801',
       priceRange: '₹₹',
       areaServed: [
         { '@type': 'AdministrativeArea', name: 'South Delhi' },
