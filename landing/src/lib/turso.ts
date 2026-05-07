@@ -2,6 +2,7 @@ import { createClient, type Client } from '@libsql/client';
 
 let cachedClient: Client | null = null;
 let leadsTableEnsured = false;
+let eventsTableEnsured = false;
 
 function readEnv(name: string): string | undefined {
   const value = process.env[name];
@@ -48,6 +49,31 @@ export async function ensureLeadsTable(): Promise<void> {
   leadsTableEnsured = true;
 }
 
+export async function ensureEventsTable(): Promise<void> {
+  if (eventsTableEnsured) return;
+  const client = getTursoClient();
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      session_id TEXT,
+      name TEXT NOT NULL,
+      page_path TEXT,
+      location TEXT,
+      params_json TEXT,
+      user_agent TEXT,
+      referrer TEXT
+    )
+  `);
+  await client.execute(
+    `CREATE INDEX IF NOT EXISTS idx_events_created_at ON events(created_at DESC)`,
+  );
+  await client.execute(
+    `CREATE INDEX IF NOT EXISTS idx_events_name ON events(name)`,
+  );
+  eventsTableEnsured = true;
+}
+
 export interface LeadInput {
   name: string;
   whatsapp: string;
@@ -79,6 +105,35 @@ export async function insertLead(lead: LeadInput): Promise<void> {
       lead.consent ? 1 : 0,
       lead.source,
       lead.formVariant,
+    ],
+  });
+}
+
+export interface EventInput {
+  sessionId?: string | null;
+  name: string;
+  pagePath?: string | null;
+  location?: string | null;
+  params?: Record<string, unknown> | null;
+  userAgent?: string | null;
+  referrer?: string | null;
+}
+
+export async function insertEvent(ev: EventInput): Promise<void> {
+  await ensureEventsTable();
+  const client = getTursoClient();
+  await client.execute({
+    sql: `INSERT INTO events
+      (session_id, name, page_path, location, params_json, user_agent, referrer)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    args: [
+      ev.sessionId ?? null,
+      ev.name,
+      ev.pagePath ?? null,
+      ev.location ?? null,
+      ev.params ? JSON.stringify(ev.params) : null,
+      ev.userAgent ?? null,
+      ev.referrer ?? null,
     ],
   });
 }

@@ -7,12 +7,7 @@ export const dynamic = 'force-dynamic';
 interface LeadPayload {
   name?: unknown;
   whatsapp?: unknown;
-  businessName?: unknown;
   businessType?: unknown;
-  locality?: unknown;
-  website?: unknown;
-  problem?: unknown;
-  consent?: unknown;
   source?: unknown;
   formVariant?: unknown;
 }
@@ -27,7 +22,6 @@ function asString(v: unknown, max = 500): string | null {
 function normaliseWhatsApp(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;
   const digits = raw.replace(/\D/g, '');
-  // Strip a leading 91 country code if present and length is 12
   const ten = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
   if (ten.length !== 10) return null;
   if (!/^[6-9]/.test(ten)) return null;
@@ -44,7 +38,7 @@ export async function POST(request: Request) {
 
   const name = asString(payload.name, 120);
   const whatsapp = normaliseWhatsApp(payload.whatsapp);
-  const consent = payload.consent === true;
+  const businessType = asString(payload.businessType, 120);
   const formVariant = payload.formVariant === 'exit' ? 'exit' : 'main';
   const source = asString(payload.source, 80) ?? '70-discount-offering';
 
@@ -57,51 +51,22 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  if (!consent) {
+  if (!businessType) {
     return NextResponse.json(
-      { error: 'Please accept the consent checkbox to continue' },
+      { error: 'Pick a business type' },
       { status: 400 },
     );
   }
 
-  const businessName = asString(payload.businessName, 200);
-  const businessType = asString(payload.businessType, 80);
-  const locality = asString(payload.locality, 120);
-  const website = asString(payload.website, 300);
-  const problem = asString(payload.problem, 1000);
-
-  // Main form requires business name + type + locality. Exit modal allows fewer fields.
-  if (formVariant === 'main') {
-    if (!businessName) {
-      return NextResponse.json(
-        { error: 'Business name is required' },
-        { status: 400 },
-      );
-    }
-    if (!businessType) {
-      return NextResponse.json(
-        { error: 'Business type is required' },
-        { status: 400 },
-      );
-    }
-    if (!locality) {
-      return NextResponse.json(
-        { error: 'Locality is required' },
-        { status: 400 },
-      );
-    }
-  }
-
   try {
+    // v2: consent is implicit by submission (DPDP-compliant for the
+    // transactional purpose of sending the requested PDF + one follow-up).
+    // The trust line on the form discloses this.
     await insertLead({
       name,
       whatsapp,
-      businessName,
       businessType,
-      locality,
-      website,
-      problem,
-      consent,
+      consent: true,
       source,
       formVariant,
     });
@@ -112,8 +77,6 @@ export async function POST(request: Request) {
         whatsapp,
         formVariant,
       });
-      // Return success to the user so the funnel still works in pre-prod
-      // environments. Logs surface the misconfiguration.
       return NextResponse.json({ ok: true, stored: false }, { status: 200 });
     }
     console.error('[leads] insert failed', err);
