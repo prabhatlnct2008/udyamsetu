@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { ADMIN_COOKIE_NAME } from '@/app/api/dashboard-auth/route';
 import {
   ensureEventsTable,
   ensureLeadsTable,
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: Promise<{ token?: string; range?: string }>;
+  searchParams: Promise<{ range?: string }>;
 }
 
 interface LeadRow {
@@ -66,13 +68,26 @@ function rangeToHours(range: string | undefined): { hours: number; label: string
   return { hours: 24 * 7, label: 'Last 7 days' };
 }
 
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 export default async function DashboardPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const expected = process.env.ADMIN_TOKEN;
-  // If ADMIN_TOKEN is not set on the server, the dashboard is hard-disabled
-  // — there is no implicit "no auth required" mode. Token mismatch returns 404.
-  if (!expected || params.token !== expected) {
-    notFound();
+  // If ADMIN_TOKEN is not set on the server, the dashboard is hard-disabled.
+  if (!expected) {
+    redirect('/dashboard/login?error=unconfigured');
+  }
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(ADMIN_COOKIE_NAME)?.value ?? '';
+  if (!cookieValue || !timingSafeEqual(cookieValue, expected)) {
+    redirect('/dashboard/login');
   }
 
   const range = rangeToHours(params.range);
@@ -175,14 +190,25 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   return (
     <main className="min-h-screen bg-[#FFF6E8]">
       <header className="bg-white border-b border-[#E9D8C3] sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-3">
           <Link
             href="/"
             className="text-xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]"
           >
             UdyamSetu · Analytics
           </Link>
-          <RangePicker token={params.token ?? ''} active={params.range ?? '7d'} />
+          <div className="flex items-center gap-3">
+            <RangePicker active={params.range ?? '7d'} />
+            <form action="/api/dashboard-auth" method="POST">
+              <input type="hidden" name="action" value="logout" />
+              <button
+                type="submit"
+                className="text-xs text-[#1A1A1A]/60 hover:text-[#1F2A6D] underline"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
@@ -412,7 +438,7 @@ function Stat({
   );
 }
 
-function RangePicker({ token, active }: { token: string; active: string }) {
+function RangePicker({ active }: { active: string }) {
   const ranges: { key: string; label: string }[] = [
     { key: '1h', label: '1 hour' },
     { key: '24h', label: '24 hours' },
@@ -426,7 +452,7 @@ function RangePicker({ token, active }: { token: string; active: string }) {
         return (
           <Link
             key={r.key}
-            href={`/dashboard?token=${encodeURIComponent(token)}&range=${r.key}`}
+            href={`/dashboard?range=${r.key}`}
             className={`px-2.5 py-1 rounded-lg transition-colors ${
               isActive
                 ? 'bg-[#1F2A6D] text-white'
