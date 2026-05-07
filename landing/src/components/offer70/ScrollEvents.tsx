@@ -7,20 +7,27 @@ export default function ScrollEvents() {
   useEffect(() => {
     trackEvent('view_landing_page');
 
-    let fired50 = false;
+    let fired25 = false;
+    let fired60 = false;
+
     function onScroll() {
-      if (fired50) return;
+      if (fired25 && fired60) return;
       const max = Math.max(
         1,
         document.documentElement.scrollHeight - window.innerHeight,
       );
       const depth = window.scrollY / max;
-      if (depth >= 0.5) {
-        fired50 = true;
-        trackEvent('scroll_50_percent');
+      if (!fired25 && depth >= 0.25) {
+        fired25 = true;
+        trackEvent('scroll_25_pct');
+      }
+      if (!fired60 && depth >= 0.6) {
+        fired60 = true;
+        trackEvent('scroll_60_pct');
       }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 

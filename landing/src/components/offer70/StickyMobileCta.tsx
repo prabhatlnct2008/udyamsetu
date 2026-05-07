@@ -26,7 +26,7 @@ export default function StickyMobileCta() {
         onClick={() => trackEvent('cta_click_primary', { location: 'sticky-mobile' })}
         className="block w-full text-center bg-[#FF8A00] hover:bg-[#F57C00] text-white font-semibold py-3.5 rounded-xl"
       >
-        📥 Download Complete Proposal — Free
+        📥 Send Me the PDF on WhatsApp
       </a>
     </div>
   );
