@@ -1,4 +1,8 @@
+import Link from 'next/link';
 import type { PageContent } from './types';
+
+const LINK_CLASS =
+  'text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors';
 
 const content: PageContent = {
   slug: 'website-development-company-south-delhi',
@@ -48,7 +52,30 @@ const content: PageContent = {
     heading: 'Why many business websites fail',
     body: [
       'Many websites have attractive banners but weak service clarity. They do not answer pricing or process questions, they hide the CTA, they load slowly on mobile, they lack local pages, and they do not track which page generated a lead. In South Delhi, where buyers compare quickly, a vague website sends serious enquiries to competitors.',
-      'A redesign without a page map produces another good-looking site that under-performs. The work has to start from buyer questions, not a homepage hero, and every page should have a clear conversion job.',
+      (
+        <p key="website-pain-2">
+          A redesign without a page map produces another good-looking site that
+          under-performs. The work has to start from buyer questions, not a
+          homepage hero, and every page should have a clear conversion job —
+          paired with the right{' '}
+          <Link href="/seo-company-south-delhi" className={LINK_CLASS}>
+            SEO architecture
+          </Link>{' '}
+          so the pages can actually be found, and{' '}
+          <Link
+            href="/ai-business-automation-services-south-delhi"
+            className={LINK_CLASS}
+          >
+            workflow automation
+          </Link>{' '}
+          so enquiries do not die in an inbox. See{' '}
+          <Link href="/portfolio" className={LINK_CLASS}>
+            real builds we have shipped across healthcare, logistics, and
+            education
+          </Link>{' '}
+          for what this looks like in practice.
+        </p>
+      ),
     ],
     pullquote: 'Your website should make the next step obvious within seconds.',
   },
