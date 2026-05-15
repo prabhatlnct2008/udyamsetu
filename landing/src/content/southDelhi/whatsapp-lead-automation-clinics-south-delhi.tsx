@@ -1,4 +1,8 @@
+import Link from 'next/link';
 import type { PageContent } from './types';
+
+const LINK_CLASS =
+  'text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors';
 
 const content: PageContent = {
   slug: 'whatsapp-lead-automation-clinics-south-delhi',
@@ -47,7 +51,36 @@ const content: PageContent = {
     heading: "Why front-desk-only follow-up breaks down",
     body: [
       'Clinic enquiries often arrive when the front desk is busy with patients, calls, walk-ins, billing, or doctor coordination. A patient searching from Saket, Malviya Nagar, or Hauz Khas usually wants quick clarity: which service, which doctor, appointment availability, fee range if shared, location, and how to book. If the response is delayed, the patient moves to the next clinic on the search results.',
-      'The practical issues are familiar: missed after-hours enquiries, repeated questions, unclear service pages, no reminder system, no lead status, and no connection between local SEO pages and front-desk workflow. Each of these is fixable with a calm, approved automation layer.',
+      (
+        <p key="clinic-pain-2">
+          The practical issues are familiar: missed after-hours enquiries,
+          repeated questions, unclear service pages, no reminder system, no
+          lead status, and no connection between local SEO pages and front-desk
+          workflow. Each of these is fixable with a calm, approved automation
+          layer that sits inside the broader{' '}
+          <Link
+            href="/ai-business-automation-services-south-delhi"
+            className={LINK_CLASS}
+          >
+            AI Business Automation system
+          </Link>{' '}
+          and a{' '}
+          <Link
+            href="/lead-generation-services-south-delhi"
+            className={LINK_CLASS}
+          >
+            measurable lead pipeline
+          </Link>
+          . If you have not scoped the first AI workflow yet, start with an{' '}
+          <Link
+            href="/ai-consulting-services-south-delhi"
+            className={LINK_CLASS}
+          >
+            AI Opportunity Audit
+          </Link>
+          .
+        </p>
+      ),
     ],
     pullquote:
       'Automation handles booking support. Medical decisions remain with qualified professionals.',

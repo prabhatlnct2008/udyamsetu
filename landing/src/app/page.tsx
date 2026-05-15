@@ -115,6 +115,52 @@ export default function Home() {
             <p className="mt-8 text-xl font-semibold text-[#1F2A6D]">
               That&apos;s exactly what <span className="text-[#FF8A00]">UdyamSetu</span> builds.
             </p>
+
+            <p className="mt-8 text-base text-[#1A1A1A]/80">
+              Looking for a specific service? See how we deliver an{' '}
+              <Link
+                href="/seo-company-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                SEO foundation
+              </Link>
+              ,{' '}
+              <Link
+                href="/ai-consulting-services-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                AI consulting roadmap
+              </Link>
+              ,{' '}
+              <Link
+                href="/digital-marketing-automation-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                marketing automation
+              </Link>
+              ,{' '}
+              <Link
+                href="/real-estate-lead-generation-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                real estate lead generation
+              </Link>
+              , or our{' '}
+              <Link
+                href="/nehru-place-okhla-b2b-ai-seo-growth-systems"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                Nehru Place &amp; Okhla B2B growth systems
+              </Link>
+              . Full FAQ at{' '}
+              <Link
+                href="/faqs"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                udyamsetuai.in/faqs
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>

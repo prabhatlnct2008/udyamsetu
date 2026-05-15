@@ -1,4 +1,8 @@
+import Link from 'next/link';
 import type { PageContent } from './types';
+
+const LINK_CLASS =
+  'text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors';
 
 const content: PageContent = {
   slug: 'lead-generation-services-south-delhi',
@@ -48,7 +52,40 @@ const content: PageContent = {
     heading: 'What goes wrong with typical lead generation',
     body: [
       'Many agencies focus on lead count. Business owners care about whether those leads answer calls, fit the budget, need the right service, and can convert. In South Delhi, where markets range from clinics and premium services to real estate, B2B suppliers, and local retail, the same campaign cannot work for everyone.',
-      'Leads arrive on WhatsApp, get lost in chat, or sit in a sheet that no one reviews. Forms collect names without intent. Ads send traffic to a homepage that does not match the search. Owners cannot tell which page or campaign produced a serious enquiry, so improvements stall.',
+      (
+        <p key="leads-pain-2">
+          Leads arrive on WhatsApp, get lost in chat, or sit in a sheet that no
+          one reviews. Forms collect names without intent. Ads send traffic to a
+          homepage that does not match the search. Owners cannot tell which
+          page or campaign produced a serious enquiry, so improvements stall.
+          The fix is rarely &ldquo;more leads&rdquo; — it is the right{' '}
+          <Link href="/seo-company-south-delhi" className={LINK_CLASS}>
+            SEO foundation
+          </Link>
+          ,{' '}
+          <Link
+            href="/ai-business-automation-services-south-delhi"
+            className={LINK_CLASS}
+          >
+            workflow automation
+          </Link>
+          , and{' '}
+          <Link
+            href="/digital-marketing-automation-south-delhi"
+            className={LINK_CLASS}
+          >
+            campaign-to-CRM tracking
+          </Link>{' '}
+          working together. For property teams specifically, see the dedicated{' '}
+          <Link
+            href="/real-estate-lead-generation-south-delhi"
+            className={LINK_CLASS}
+          >
+            South Delhi real estate funnel approach
+          </Link>
+          .
+        </p>
+      ),
     ],
     pullquote:
       'A lead is not useful until it is captured, qualified, routed, followed up, and tracked.',
