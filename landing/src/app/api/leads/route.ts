@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { postLeadToSheet } from '@/lib/googleSheet';
+// Google Sheet mirroring is disabled for now — re-enable by uncommenting the
+// import + the postLeadToSheet block below once the Apps Script webhook is set.
+// import { postLeadToSheet } from '@/lib/googleSheet';
 import { insertLead, TursoNotConfiguredError } from '@/lib/turso';
 
 export const runtime = 'nodejs';
@@ -9,7 +11,10 @@ interface LeadPayload {
   name?: unknown;
   whatsapp?: unknown;
   businessType?: unknown;
+  businessName?: unknown;
   website?: unknown;
+  timeline?: unknown;
+  goal?: unknown;
   source?: unknown;
   formVariant?: unknown;
 }
@@ -41,51 +46,56 @@ export async function POST(request: Request) {
   const name = asString(payload.name, 120);
   const whatsapp = normaliseWhatsApp(payload.whatsapp);
   const businessType = asString(payload.businessType, 120);
-  // Optional free-text "website status" answer (e.g. AI Revenue Studio's
-  // "do you already have a website?" chip). Stored in the website column.
+  const businessName = asString(payload.businessName, 200);
+  // Free-text "website status" answer (e.g. the "do you already have a
+  // website?" chip). Stored in the website column.
   const website = asString(payload.website, 200);
+  // v3 qualification answers — packed into the problem column as a readable
+  // string so no schema migration is needed.
+  const timeline = asString(payload.timeline, 120);
+  const goal = asString(payload.goal, 120);
+  const problemParts: string[] = [];
+  if (timeline) problemParts.push(`Timeline: ${timeline}`);
+  if (goal) problemParts.push(`Goal: ${goal}`);
+  const problem = problemParts.length ? problemParts.join(' · ') : null;
+
   const formVariant = payload.formVariant === 'exit' ? 'exit' : 'main';
   const source = asString(payload.source, 80) ?? '70-discount-offering';
 
-  if (!name) {
-    return NextResponse.json({ error: 'Name is required' }, { status: 400 });
-  }
+  // Only the WhatsApp number is strictly required server-side. Each form
+  // enforces its own variant-specific required fields client-side (v2 is
+  // phone-only by design; v1/v3 require name + business type before submit).
   if (!whatsapp) {
     return NextResponse.json(
       { error: 'Enter a valid 10-digit Indian WhatsApp number' },
       { status: 400 },
     );
   }
-  if (!businessType) {
-    return NextResponse.json(
-      { error: 'Pick a business type' },
-      { status: 400 },
-    );
-  }
 
-  // Append to the Google Sheet in parallel with the Turso insert (best-effort).
-  // A failure here never fails the request — the lead is still stored in Turso.
-  const sheetPromise = postLeadToSheet({
-    name,
-    whatsapp,
-    businessType,
-    website,
-    source,
-    formVariant,
-  }).catch((err) => {
-    console.error('[leads] sheet append failed', err);
-  });
+  // --- Google Sheet mirroring (disabled for now) ---
+  // const sheetPromise = postLeadToSheet({
+  //   name: name ?? '',
+  //   whatsapp,
+  //   businessType,
+  //   website,
+  //   source,
+  //   formVariant,
+  // }).catch((err) => {
+  //   console.error('[leads] sheet append failed', err);
+  // });
 
   let stored = true;
   try {
-    // v2: consent is implicit by submission (DPDP-compliant for the
-    // transactional purpose of sending the requested PDF + one follow-up).
-    // The trust line on the form discloses this.
+    // Consent is implicit by submission (DPDP-compliant for the transactional
+    // purpose of the requested follow-up). The trust line on each form
+    // discloses this.
     await insertLead({
-      name,
+      name: name ?? '',
       whatsapp,
       businessType,
+      businessName,
       website,
+      problem,
       consent: true,
       source,
       formVariant,
@@ -100,8 +110,7 @@ export async function POST(request: Request) {
       stored = false;
     } else {
       console.error('[leads] insert failed', err);
-      // Let the sheet append finish so the lead is not lost there too.
-      await sheetPromise;
+      // await sheetPromise;
       return NextResponse.json(
         { error: 'Could not save your details right now. Please WhatsApp us instead.' },
         { status: 500 },
@@ -109,8 +118,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Ensure the sheet append completes before the serverless function returns.
-  await sheetPromise;
+  // await sheetPromise;
 
   return NextResponse.json({ ok: true, stored });
 }

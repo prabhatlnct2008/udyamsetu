@@ -1,57 +1,53 @@
 import type { Metadata } from 'next';
 import MetaPixel from '@/components/offer70/MetaPixel';
-import ContactSection from '@/components/aiRevenueStudio/ContactSection';
 import IncludedSection from '@/components/aiRevenueStudio/IncludedSection';
-import LeadForm from '@/components/aiRevenueStudio/LeadForm';
+import LeadFormV2 from '@/components/aiRevenueStudio/LeadFormV2';
 import Nav from '@/components/aiRevenueStudio/Nav';
 import SiteFooter from '@/components/aiRevenueStudio/SiteFooter';
 import ValueStrip from '@/components/aiRevenueStudio/ValueStrip';
+import { WHATSAPP_DISPLAY } from '@/content/aiRevenueStudio';
 
 export const metadata: Metadata = {
-  title: 'AI Revenue Studio — Your Website, AI-Designed. Live in 24 Hours. ₹99.',
+  title: 'AI Revenue Studio — Get your website on WhatsApp. ₹99.',
   description:
-    'Your website, AI-designed. Live in 24 hours. ₹99 launch offer for Indian small businesses.',
-  alternates: { canonical: 'https://udyamsetuai.in/ai_revenue_studio' },
+    'Drop your WhatsApp number. We send a sample design in 2 hours. Full site live in 24. ₹99, pay only when you say yes.',
+  alternates: { canonical: 'https://udyamsetuai.in/ai_revenue_studio/v2' },
   openGraph: {
-    title: 'Your website, AI-designed. Live in 24 hours. ₹99.',
+    title: 'Get your website on WhatsApp. ₹99.',
     description:
-      'Tell us about your business in 60 seconds. AI designs the site, our team ships it. Live tomorrow, ready to take leads.',
-    url: 'https://udyamsetuai.in/ai_revenue_studio',
+      'Drop your WhatsApp number. Sample in 2 hours. Live in 24. WhatsApp-only.',
+    url: 'https://udyamsetuai.in/ai_revenue_studio/v2',
     siteName: 'AI Revenue Studio',
     type: 'website',
   },
 };
 
+// Value strip reordered: lead with the WhatsApp-native promise.
 const VALUE_STATS = [
+  { stat: '∞', caption: 'WhatsApp + call button. Leads come to your phone directly.' },
   { stat: '24h', caption: 'From brief to live website. No "agency time".' },
   { stat: '₹99', caption: 'Pay only when you see the site. No upfront commitment.' },
   { stat: '5+', caption: 'Pages: home, about, services, contact, plus one custom.' },
-  { stat: '∞', caption: 'WhatsApp + call button. Leads come to your phone directly.' },
 ];
 
 const INCLUDED = [
   {
     n: '01',
-    title: 'AI-designed pages',
-    body: 'Our AI studies your business, your competitors, and your customers — then designs pages that match. Not a drag-and-drop template.',
+    title: 'See it before you pay',
+    body: 'We send a working sample in 2 hours. ₹99 only when you say yes.',
   },
   {
     n: '02',
-    title: 'Mobile-first, fast',
-    body: '85% of your visitors are on mobile. Sites load in under 2 seconds, look sharp on every screen, and rank well on Google.',
-  },
-  {
-    n: '03',
-    title: 'Leads to WhatsApp',
-    body: 'Every page has a tap-to-WhatsApp and tap-to-call button. Leads land in your phone, not in some dashboard you forget to check.',
+    title: 'Lives on WhatsApp',
+    body: 'Updates, leads, edits — all in your phone. No dashboards.',
   },
 ];
 
-export default function AiRevenueStudioPage() {
+export default function AiRevenueStudioV2Page() {
   return (
     <main className="min-h-screen bg-white text-[#0F172A]">
       <MetaPixel />
-      <Nav />
+      <Nav ctaLabel="Send me a sample →" />
 
       {/* HERO */}
       <section className="relative overflow-hidden">
@@ -66,36 +62,28 @@ export default function AiRevenueStudioPage() {
           </span>
 
           <h1 className="mt-5 text-4xl md:text-6xl font-bold leading-tight font-[family-name:var(--font-poppins)]">
-            Your website, AI-designed.
-            <br />
+            Get your website on WhatsApp.{' '}
             <span className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent">
-              Live in 24 hours.
+              ₹99.
             </span>
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-            Tell us about your business in 60 seconds. Our AI designs the site,
-            our team ships it. You wake up tomorrow with a real website online —
-            ready to take leads.
+            Drop your WhatsApp number. We&apos;ll send you a sample design in 2
+            hours. If you like it, your full site goes live in 24.
           </p>
 
-          <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="mt-9 flex justify-center">
             <a
               href="#lead-form"
               className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:from-[#4338CA] hover:to-[#6D28D9] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
             >
-              Get yours for ₹99 →
-            </a>
-            <a
-              href="#included"
-              className="border-2 border-slate-200 hover:border-[#4F46E5] text-[#0F172A] px-8 py-4 rounded-xl font-semibold text-lg transition-all"
-            >
-              See what&apos;s included
+              Send me a sample →
             </a>
           </div>
 
           <p className="mt-6 text-sm text-slate-500">
-            500+ businesses launched · 4.9★ avg rating · Pay only when live
+            No forms. No calls. WhatsApp-only.
           </p>
         </div>
       </section>
@@ -107,33 +95,34 @@ export default function AiRevenueStudioPage() {
         cards={INCLUDED}
       />
 
-      {/* LEAD FORM */}
+      {/* LEAD FORM — phone only */}
       <section id="lead-form" className="py-16 md:py-24 scroll-mt-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-xs font-semibold text-[#4F46E5] uppercase tracking-[0.2em]">
-              Get yours in 60 seconds
+              Just one step
             </p>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold font-[family-name:var(--font-poppins)]">
-              Two quick questions. Then we get to work.
+              Drop your WhatsApp. We&apos;ll handle the rest.
             </h2>
             <p className="mt-4 text-slate-600">
-              Once you submit, we&apos;ll WhatsApp you within minutes to confirm
-              details and start design. Your site goes live in 24 hours.
+              We&apos;ll send a sample design in 2 hours. Pay nothing until you
+              see it.
             </p>
           </div>
 
           <div className="mt-10 rounded-2xl bg-[#F8FAFC] border border-slate-100 p-6 md:p-8">
-            <LeadForm />
+            <LeadFormV2 />
           </div>
         </div>
       </section>
 
-      <ContactSection
-        eyebrow="Talk to us"
-        title="Prefer a quick chat? We're listening."
-        body="Skip the form. WhatsApp us directly with your business name and we'll take it from there."
-      />
+      {/* No contact section in v2 — just a tiny call line */}
+      <section className="pb-16 text-center">
+        <p className="text-sm text-slate-500">
+          Prefer to call? {WHATSAPP_DISPLAY}
+        </p>
+      </section>
 
       <SiteFooter />
     </main>
