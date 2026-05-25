@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 const WHATSAPP_NUMBER = '918882567801';
 const WHATSAPP_DISPLAY = '+91 88825 67801';
-const EMAIL = 'hello@airevenuestudio.in';
+const EMAIL = 'airevenuestudio@gmail.com';
 const WHATSAPP_GENERIC = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
   'Hi! I want to know about the ₹99 AI-designed website.',
 )}`;
