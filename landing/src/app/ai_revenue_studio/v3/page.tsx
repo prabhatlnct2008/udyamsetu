@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import MetaPixel from '@/components/offer70/MetaPixel';
+import AnalyticsBeacon from '@/components/aiRevenueStudio/AnalyticsBeacon';
 import ContactSection from '@/components/aiRevenueStudio/ContactSection';
 import IncludedSection from '@/components/aiRevenueStudio/IncludedSection';
 import LeadFormV3 from '@/components/aiRevenueStudio/LeadFormV3';
@@ -58,6 +59,7 @@ export default function AiRevenueStudioV3Page() {
   return (
     <main className="min-h-screen bg-white text-[#0F172A]">
       <MetaPixel />
+      <AnalyticsBeacon />
       <Nav ctaLabel="Plan my website →" />
 
       {/* HERO */}
