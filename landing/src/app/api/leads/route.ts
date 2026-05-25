@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { postLeadToSheet } from '@/lib/googleSheet';
 import { insertLead, TursoNotConfiguredError } from '@/lib/turso';
 
 export const runtime = 'nodejs';
@@ -8,6 +9,7 @@ interface LeadPayload {
   name?: unknown;
   whatsapp?: unknown;
   businessType?: unknown;
+  website?: unknown;
   source?: unknown;
   formVariant?: unknown;
 }
@@ -39,6 +41,9 @@ export async function POST(request: Request) {
   const name = asString(payload.name, 120);
   const whatsapp = normaliseWhatsApp(payload.whatsapp);
   const businessType = asString(payload.businessType, 120);
+  // Optional free-text "website status" answer (e.g. AI Revenue Studio's
+  // "do you already have a website?" chip). Stored in the website column.
+  const website = asString(payload.website, 200);
   const formVariant = payload.formVariant === 'exit' ? 'exit' : 'main';
   const source = asString(payload.source, 80) ?? '70-discount-offering';
 
@@ -58,6 +63,20 @@ export async function POST(request: Request) {
     );
   }
 
+  // Append to the Google Sheet in parallel with the Turso insert (best-effort).
+  // A failure here never fails the request — the lead is still stored in Turso.
+  const sheetPromise = postLeadToSheet({
+    name,
+    whatsapp,
+    businessType,
+    website,
+    source,
+    formVariant,
+  }).catch((err) => {
+    console.error('[leads] sheet append failed', err);
+  });
+
+  let stored = true;
   try {
     // v2: consent is implicit by submission (DPDP-compliant for the
     // transactional purpose of sending the requested PDF + one follow-up).
@@ -66,6 +85,7 @@ export async function POST(request: Request) {
       name,
       whatsapp,
       businessType,
+      website,
       consent: true,
       source,
       formVariant,
@@ -77,14 +97,20 @@ export async function POST(request: Request) {
         whatsapp,
         formVariant,
       });
-      return NextResponse.json({ ok: true, stored: false }, { status: 200 });
+      stored = false;
+    } else {
+      console.error('[leads] insert failed', err);
+      // Let the sheet append finish so the lead is not lost there too.
+      await sheetPromise;
+      return NextResponse.json(
+        { error: 'Could not save your details right now. Please WhatsApp us instead.' },
+        { status: 500 },
+      );
     }
-    console.error('[leads] insert failed', err);
-    return NextResponse.json(
-      { error: 'Could not save your details right now. Please WhatsApp us instead.' },
-      { status: 500 },
-    );
   }
 
-  return NextResponse.json({ ok: true, stored: true });
+  // Ensure the sheet append completes before the serverless function returns.
+  await sheetPromise;
+
+  return NextResponse.json({ ok: true, stored });
 }
