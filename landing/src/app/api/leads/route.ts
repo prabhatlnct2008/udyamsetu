@@ -8,6 +8,7 @@ interface LeadPayload {
   name?: unknown;
   whatsapp?: unknown;
   businessType?: unknown;
+  website?: unknown;
   source?: unknown;
   formVariant?: unknown;
 }
@@ -39,6 +40,9 @@ export async function POST(request: Request) {
   const name = asString(payload.name, 120);
   const whatsapp = normaliseWhatsApp(payload.whatsapp);
   const businessType = asString(payload.businessType, 120);
+  // Optional free-text "website status" answer (e.g. AI Revenue Studio's
+  // "do you already have a website?" chip). Stored in the website column.
+  const website = asString(payload.website, 200);
   const formVariant = payload.formVariant === 'exit' ? 'exit' : 'main';
   const source = asString(payload.source, 80) ?? '70-discount-offering';
 
@@ -66,6 +70,7 @@ export async function POST(request: Request) {
       name,
       whatsapp,
       businessType,
+      website,
       consent: true,
       source,
       formVariant,
