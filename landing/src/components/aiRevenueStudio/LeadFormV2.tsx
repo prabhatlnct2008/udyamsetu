@@ -64,7 +64,6 @@ export default function LeadFormV2() {
             <input
               type="tel"
               inputMode="numeric"
-              autoFocus
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
               onFocus={() => {
@@ -93,8 +92,8 @@ export default function LeadFormV2() {
           </p>
         )}
 
-        <p className="text-sm text-slate-500">
-          We&apos;ll only message about your website. No spam.
+        <p className="text-sm text-slate-500 text-center">
+          No payment. We&apos;ll WhatsApp you back.
         </p>
       </form>
 

@@ -6,7 +6,7 @@ import LeadFormV2 from '@/components/aiRevenueStudio/LeadFormV2';
 import Nav from '@/components/aiRevenueStudio/Nav';
 import SiteFooter from '@/components/aiRevenueStudio/SiteFooter';
 import ValueStrip from '@/components/aiRevenueStudio/ValueStrip';
-import { WHATSAPP_DISPLAY } from '@/content/aiRevenueStudio';
+import { WHATSAPP_DISPLAY, buildWhatsAppLink } from '@/content/aiRevenueStudio';
 
 export const metadata: Metadata = {
   title: 'AI Revenue Studio — Get your website on WhatsApp. ₹99.',
@@ -44,6 +44,10 @@ const INCLUDED = [
   },
 ];
 
+const WHATSAPP_DIRECT = buildWhatsAppLink(
+  'Hi, I want the ₹99 website. Can you send me a sample design?',
+);
+
 export default function AiRevenueStudioV2Page() {
   return (
     <main className="min-h-screen bg-white text-[#0F172A]">
@@ -51,42 +55,56 @@ export default function AiRevenueStudioV2Page() {
       <AnalyticsBeacon />
       <Nav ctaLabel="Send me a sample →" />
 
-      {/* HERO */}
+      {/* HERO IS THE FORM — headline + one-field form + WhatsApp escape hatch,
+          all above the fold on a 375×667 viewport. Everything else is below. */}
       <section className="relative overflow-hidden">
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(79,70,229,0.10),transparent_70%)]"
+          className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_0%,rgba(79,70,229,0.10),transparent_70%)]"
         />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
-          <span className="inline-flex items-center gap-2 bg-[#EEF1FF] text-[#4F46E5] px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-[#4F46E5] animate-pulse" />
-            Launch offer · 24-hour delivery
-          </span>
-
-          <h1 className="mt-5 text-4xl md:text-6xl font-bold leading-tight font-[family-name:var(--font-poppins)]">
-            Get your website on WhatsApp.{' '}
-            <span className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent">
-              ₹99.
+        <div className="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-14">
+          <div className="text-center">
+            <span className="inline-flex items-center gap-2 bg-[#EEF1FF] text-[#4F46E5] px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-[#4F46E5] animate-pulse" />
+              24-hour delivery
             </span>
-          </h1>
 
-          <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-            Drop your WhatsApp number. We&apos;ll send you a sample design in 2
-            hours. If you like it, your full site goes live in 24.
-          </p>
+            <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight font-[family-name:var(--font-poppins)]">
+              Get your website on WhatsApp.{' '}
+              <span className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent">
+                ₹99.
+              </span>
+            </h1>
 
-          <div className="mt-9 flex justify-center">
-            <a
-              href="#lead-form"
-              className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:from-[#4338CA] hover:to-[#6D28D9] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
-            >
-              Send me a sample →
-            </a>
+            <p className="mt-3 text-base md:text-lg text-slate-600">
+              Drop your number. We send a sample design in 2 hours.
+            </p>
           </div>
 
-          <p className="mt-6 text-sm text-slate-500">
-            No forms. No calls. WhatsApp-only.
-          </p>
+          {/* The form, right here */}
+          <div id="lead-form" className="mt-6 scroll-mt-20">
+            <LeadFormV2 />
+          </div>
+
+          {/* Escape hatch for users who won't fill a form */}
+          <div className="mt-6 flex items-center gap-3 text-slate-400 text-sm">
+            <span className="flex-1 h-px bg-slate-200" />
+            or
+            <span className="flex-1 h-px bg-slate-200" />
+          </div>
+          <div className="mt-3 text-center">
+            <a
+              href={WHATSAPP_DIRECT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto border border-[#25D366] text-[#1ba34c] hover:bg-[#25D366]/10 px-6 py-3 rounded-xl font-semibold transition-colors"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884" />
+              </svg>
+              WhatsApp directly →
+            </a>
+          </div>
         </div>
       </section>
 
@@ -97,30 +115,8 @@ export default function AiRevenueStudioV2Page() {
         cards={INCLUDED}
       />
 
-      {/* LEAD FORM — phone only */}
-      <section id="lead-form" className="py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-xs font-semibold text-[#4F46E5] uppercase tracking-[0.2em]">
-              Just one step
-            </p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-bold font-[family-name:var(--font-poppins)]">
-              Drop your WhatsApp. We&apos;ll handle the rest.
-            </h2>
-            <p className="mt-4 text-slate-600">
-              We&apos;ll send a sample design in 2 hours. Pay nothing until you
-              see it.
-            </p>
-          </div>
-
-          <div className="mt-10 rounded-2xl bg-[#F8FAFC] border border-slate-100 p-6 md:p-8">
-            <LeadFormV2 />
-          </div>
-        </div>
-      </section>
-
       {/* No contact section in v2 — just a tiny call line */}
-      <section className="pb-16 text-center">
+      <section className="py-12 text-center">
         <p className="text-sm text-slate-500">
           Prefer to call? {WHATSAPP_DISPLAY}
         </p>
