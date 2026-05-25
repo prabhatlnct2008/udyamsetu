@@ -23,6 +23,7 @@ interface PageProps {
     range?: string;
     event?: string;
     page?: string;
+    session?: string;
     sort?: string;
     dir?: string;
   }>;
@@ -32,6 +33,7 @@ type CurrentParams = {
   range?: string;
   event?: string;
   page?: string;
+  session?: string;
   sort?: string;
   dir?: string;
 };
@@ -139,6 +141,10 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   // Filter + sort state for the events log.
   const filterEvent = params.event && params.event.length <= 80 ? params.event : '';
   const filterPage = params.page && params.page.length <= 200 ? params.page : '';
+  const filterSession =
+    params.session && params.session.trim().length > 0
+      ? params.session.trim().slice(0, 80)
+      : '';
   const sortKey = params.sort && SORT_COLUMNS[params.sort] ? params.sort : 'time';
   const sortCol = SORT_COLUMNS[sortKey];
   const sortDir = params.dir === 'asc' ? 'ASC' : 'DESC';
@@ -147,13 +153,19 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     range: params.range,
     event: filterEvent || undefined,
     page: filterPage || undefined,
+    session: filterSession || undefined,
     sort: sortKey,
     dir: params.dir === 'asc' ? 'asc' : 'desc',
   };
 
   // Build the events-log WHERE clause + parameterized args.
-  const evWhere: string[] = [`created_at >= ${sinceClause}`];
+  // When a session is selected we drop the time-range constraint so the whole
+  // journey is visible regardless of the range picker.
+  const evWhere: string[] = [];
   const evArgs: string[] = [];
+  if (!filterSession) {
+    evWhere.push(`created_at >= ${sinceClause}`);
+  }
   if (filterEvent) {
     evWhere.push('name = ?');
     evArgs.push(filterEvent);
@@ -162,7 +174,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     evWhere.push('page_path = ?');
     evArgs.push(filterPage);
   }
-  const evWhereSql = evWhere.join(' AND ');
+  if (filterSession) {
+    // Prefix match so the 8-char id shown in the table is clickable, and a
+    // full id pasted into the box also matches. Escape LIKE wildcards.
+    const escaped = filterSession.replace(/[\\%_]/g, (m) => `\\${m}`);
+    evWhere.push("session_id LIKE ? ESCAPE '\\'");
+    evArgs.push(`${escaped}%`);
+  }
+  const evWhereSql = evWhere.length ? evWhere.join(' AND ') : '1=1';
 
   let totalLeads = 0;
   let totalLeadsAll = 0;
@@ -598,17 +617,28 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               </select>
             </label>
 
+            <label className="flex flex-col gap-1 text-xs text-[#1A1A1A]/65">
+              Session ID
+              <input
+                type="text"
+                name="session"
+                defaultValue={filterSession}
+                placeholder="Paste or click a session"
+                className="px-3 py-2 rounded-lg border border-[#E9D8C3] bg-white text-sm text-[#1A1A1A] font-mono w-48 focus:outline-none focus:ring-2 focus:ring-[#1F2A6D]/40"
+              />
+            </label>
+
             <button
               type="submit"
               className="px-4 py-2 rounded-lg bg-[#1F2A6D] text-white text-sm font-semibold hover:bg-[#2a3580]"
             >
               Apply
             </button>
-            {(filterEvent || filterPage) && (
+            {(filterEvent || filterPage || filterSession) && (
               <Link
                 href={buildHref(
                   { range: params.range, sort: sortKey, dir: currentParams.dir },
-                  { event: '', page: '' },
+                  { event: '', page: '', session: '' },
                 )}
                 className="px-3 py-2 text-sm text-[#1A1A1A]/60 hover:text-[#1F2A6D] underline"
               >
@@ -622,11 +652,19 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             <strong className="text-[#1F2A6D] tabular-nums">{filteredCount}</strong>{' '}
             events
             {filterEvent ? ` · type “${filterEvent}”` : ''}
-            {filterPage ? ` · page ${filterPage}` : ''} ·{' '}
+            {filterPage ? ` · page ${filterPage}` : ''}
+            {filterSession ? ` · session ${filterSession.slice(0, 8)}…` : ''} ·{' '}
             <strong className="text-[#1F2A6D] tabular-nums">
               {filteredSessions}
             </strong>{' '}
             unique sessions · showing newest {Math.min(filteredCount, 200)} below.
+            {filterSession && (
+              <span className="text-[#1A1A1A]/50">
+                {' '}
+                (time range ignored while a session is selected — full journey
+                shown; sort by When ▲ for chronological order)
+              </span>
+            )}
           </p>
 
           <div className="mt-4 rounded-2xl bg-white border border-[#E9D8C3] overflow-x-auto">
@@ -662,8 +700,25 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                     <td className="px-4 py-3 text-[#1A1A1A]/70">
                       {e.location ?? '—'}
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#1A1A1A]/55">
-                      {e.session_id ? e.session_id.slice(0, 8) : '—'}
+                    <td className="px-4 py-3 font-mono text-xs">
+                      {e.session_id ? (
+                        <Link
+                          href={buildHref(
+                            {
+                              range: params.range,
+                              sort: sortKey,
+                              dir: 'asc',
+                            },
+                            { session: e.session_id, event: '', page: '' },
+                          )}
+                          className="text-[#1F2A6D] hover:text-[#FF8A00] underline"
+                          title="See this session's full journey"
+                        >
+                          {e.session_id.slice(0, 8)}
+                        </Link>
+                      ) : (
+                        <span className="text-[#1A1A1A]/55">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}
