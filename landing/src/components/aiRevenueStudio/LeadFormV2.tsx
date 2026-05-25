@@ -16,9 +16,7 @@ export default function LeadFormV2() {
   const [done, setDone] = useState(false);
   const [touched, setTouched] = useState(false);
 
-  const waLink = buildWhatsAppLink(
-    'Hi, I dropped my number for the ₹99 website sample',
-  );
+  const waLink = buildWhatsAppLink('Hi, I just ordered the ₹99 website');
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -46,6 +44,14 @@ export default function LeadFormV2() {
       }
       fireLeadPixel('v2_phone_only');
       setDone(true);
+      // Best-effort auto-open WhatsApp (the modal headline says "Opening
+      // WhatsApp..."). Popup blockers may stop this post-async open; the
+      // modal's button is the reliable fallback.
+      try {
+        window.open(waLink, '_blank', 'noopener');
+      } catch {
+        // ignore — the modal button handles it
+      }
     } catch (err) {
       console.error(err);
       setError('Could not submit. Please WhatsApp us instead.');
@@ -82,7 +88,7 @@ export default function LeadFormV2() {
             disabled={submitting}
             className="bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:from-[#4338CA] hover:to-[#6D28D9] disabled:opacity-60 text-white px-6 py-4 rounded-xl font-semibold text-lg transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 whitespace-nowrap"
           >
-            {submitting ? 'Sending…' : 'Send me a sample →'}
+            {submitting ? 'Sending…' : 'Order my website →'}
           </button>
         </div>
 
@@ -93,15 +99,15 @@ export default function LeadFormV2() {
         )}
 
         <p className="text-sm text-slate-500 text-center">
-          No payment. We&apos;ll WhatsApp you back.
+          No payment now. Pay only when your site is live.
         </p>
       </form>
 
       {done && (
         <ThankYouModal
-          title="Sample coming your way ↓"
-          body="We'll WhatsApp you in the next 2 hours with a preview of your site. Nothing to do until then."
-          ctaLabel="Open WhatsApp →"
+          title="Order received. Opening WhatsApp…"
+          body="We'll share your design preview in the next 2 hours. Your full site goes live within 24."
+          ctaLabel="Open WhatsApp now →"
           waLink={waLink}
         />
       )}
