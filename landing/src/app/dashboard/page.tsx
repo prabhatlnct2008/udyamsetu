@@ -19,8 +19,41 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: Promise<{ range?: string }>;
+  searchParams: Promise<{
+    range?: string;
+    event?: string;
+    page?: string;
+    sort?: string;
+    dir?: string;
+  }>;
 }
+
+type CurrentParams = {
+  range?: string;
+  event?: string;
+  page?: string;
+  sort?: string;
+  dir?: string;
+};
+
+// Build a /dashboard URL preserving current params with overrides applied.
+// Pass an empty string ('') to drop a param.
+function buildHref(base: CurrentParams, overrides: CurrentParams): string {
+  const merged: Record<string, string | undefined> = { ...base, ...overrides };
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(merged)) {
+    if (v != null && v !== '') qs.set(k, v);
+  }
+  const s = qs.toString();
+  return s ? `/dashboard?${s}` : '/dashboard';
+}
+
+// Sort keys are whitelisted to DB columns so they are safe to interpolate.
+const SORT_COLUMNS: Record<string, string> = {
+  time: 'id',
+  event: 'name',
+  page: 'page_path',
+};
 
 interface LeadRow {
   id: number;
@@ -103,6 +136,34 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   const range = rangeToHours(params.range);
   const sinceClause = `datetime('now', '-${range.hours} hours')`;
 
+  // Filter + sort state for the events log.
+  const filterEvent = params.event && params.event.length <= 80 ? params.event : '';
+  const filterPage = params.page && params.page.length <= 200 ? params.page : '';
+  const sortKey = params.sort && SORT_COLUMNS[params.sort] ? params.sort : 'time';
+  const sortCol = SORT_COLUMNS[sortKey];
+  const sortDir = params.dir === 'asc' ? 'ASC' : 'DESC';
+
+  const currentParams: CurrentParams = {
+    range: params.range,
+    event: filterEvent || undefined,
+    page: filterPage || undefined,
+    sort: sortKey,
+    dir: params.dir === 'asc' ? 'asc' : 'desc',
+  };
+
+  // Build the events-log WHERE clause + parameterized args.
+  const evWhere: string[] = [`created_at >= ${sinceClause}`];
+  const evArgs: string[] = [];
+  if (filterEvent) {
+    evWhere.push('name = ?');
+    evArgs.push(filterEvent);
+  }
+  if (filterPage) {
+    evWhere.push('page_path = ?');
+    evArgs.push(filterPage);
+  }
+  const evWhereSql = evWhere.join(' AND ');
+
   let totalLeads = 0;
   let totalLeadsAll = 0;
   let leads: LeadRow[] = [];
@@ -110,6 +171,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   let funnelCounts: Record<string, number> = {};
   let eventBreakdown: CountRow[] = [];
   let pageRows: PageBreakdownRow[] = [];
+  let filteredCount = 0;
+  let filteredSessions = 0;
   let dbError: string | null = null;
 
   try {
@@ -124,6 +187,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       eventsRows,
       eventsBreakdown,
       eventsByPage,
+      filteredAgg,
     ] = await Promise.all([
       client.execute({
         sql: `SELECT COUNT(*) AS c FROM leads WHERE created_at >= ${sinceClause}`,
@@ -136,12 +200,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               ORDER BY id DESC LIMIT 50`,
         args: [],
       }),
+      // Events log — filtered + sorted. sortCol/sortDir are whitelisted;
+      // event/page values are passed as parameterized args.
       client.execute({
         sql: `SELECT id, created_at, name, page_path, location, session_id, params_json
               FROM events
-              WHERE created_at >= ${sinceClause}
-              ORDER BY id DESC LIMIT 100`,
-        args: [],
+              WHERE ${evWhereSql}
+              ORDER BY ${sortCol} ${sortDir}, id DESC LIMIT 200`,
+        args: evArgs,
       }),
       client.execute({
         sql: `SELECT name, COUNT(*) AS count FROM events
@@ -154,6 +220,12 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               WHERE created_at >= ${sinceClause} AND page_path IS NOT NULL
               GROUP BY page_path, name`,
         args: [],
+      }),
+      // Aggregation over the *filtered* event set.
+      client.execute({
+        sql: `SELECT COUNT(*) AS c, COUNT(DISTINCT session_id) AS s
+              FROM events WHERE ${evWhereSql}`,
+        args: evArgs,
       }),
     ]);
 
@@ -216,6 +288,9 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       byPage.set(page, row);
     }
     pageRows = Array.from(byPage.values()).sort((a, b) => b.views - a.views);
+
+    filteredCount = Number(filteredAgg.rows[0]?.c ?? 0);
+    filteredSessions = Number(filteredAgg.rows[0]?.s ?? 0);
   } catch (err) {
     if (err instanceof TursoNotConfiguredError) {
       dbError =
@@ -243,7 +318,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             UdyamSetu · Analytics
           </Link>
           <div className="flex items-center gap-3">
-            <RangePicker active={params.range ?? '7d'} />
+            <RangePicker active={params.range ?? '7d'} current={currentParams} />
             <form action="/api/dashboard-auth" method="POST">
               <input type="hidden" name="action" value="logout" />
               <button
@@ -469,18 +544,98 @@ export default async function DashboardPage({ searchParams }: PageProps) {
           </div>
         </section>
 
-        {/* Recent events */}
+        {/* Events log — filter + sort + aggregation */}
         <section className="mt-10 mb-16">
           <h2 className="text-xl font-semibold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
-            Recent events (last 100, in range)
+            Events log
           </h2>
+
+          {/* Filter bar (GET form; preserves range + sort via hidden fields) */}
+          <form
+            action="/dashboard"
+            method="GET"
+            className="mt-4 flex flex-wrap items-end gap-3 rounded-2xl bg-white border border-[#E9D8C3] p-4"
+          >
+            {params.range && (
+              <input type="hidden" name="range" value={params.range} />
+            )}
+            <input type="hidden" name="sort" value={sortKey} />
+            <input
+              type="hidden"
+              name="dir"
+              value={currentParams.dir ?? 'desc'}
+            />
+
+            <label className="flex flex-col gap-1 text-xs text-[#1A1A1A]/65">
+              Event type
+              <select
+                name="event"
+                defaultValue={filterEvent}
+                className="px-3 py-2 rounded-lg border border-[#E9D8C3] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F2A6D]/40"
+              >
+                <option value="">All events</option>
+                {eventBreakdown.map((e) => (
+                  <option key={e.name} value={e.name}>
+                    {e.name} ({e.count})
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-1 text-xs text-[#1A1A1A]/65">
+              Page
+              <select
+                name="page"
+                defaultValue={filterPage}
+                className="px-3 py-2 rounded-lg border border-[#E9D8C3] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#1F2A6D]/40"
+              >
+                <option value="">All pages</option>
+                {pageRows.map((p) => (
+                  <option key={p.page} value={p.page}>
+                    {p.page}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-lg bg-[#1F2A6D] text-white text-sm font-semibold hover:bg-[#2a3580]"
+            >
+              Apply
+            </button>
+            {(filterEvent || filterPage) && (
+              <Link
+                href={buildHref(
+                  { range: params.range, sort: sortKey, dir: currentParams.dir },
+                  { event: '', page: '' },
+                )}
+                className="px-3 py-2 text-sm text-[#1A1A1A]/60 hover:text-[#1F2A6D] underline"
+              >
+                Clear filters
+              </Link>
+            )}
+          </form>
+
+          {/* Filtered aggregation summary */}
+          <p className="mt-3 text-sm text-[#1A1A1A]/70">
+            <strong className="text-[#1F2A6D] tabular-nums">{filteredCount}</strong>{' '}
+            events
+            {filterEvent ? ` · type “${filterEvent}”` : ''}
+            {filterPage ? ` · page ${filterPage}` : ''} ·{' '}
+            <strong className="text-[#1F2A6D] tabular-nums">
+              {filteredSessions}
+            </strong>{' '}
+            unique sessions · showing newest {Math.min(filteredCount, 200)} below.
+          </p>
+
           <div className="mt-4 rounded-2xl bg-white border border-[#E9D8C3] overflow-x-auto">
             <table className="w-full text-sm min-w-[800px]">
               <thead className="bg-[#FFF6E8] text-[#1A1A1A]/65">
                 <tr>
-                  <th className="text-left px-4 py-3 font-semibold">When (UTC)</th>
-                  <th className="text-left px-4 py-3 font-semibold">Event</th>
-                  <th className="text-left px-4 py-3 font-semibold">Page</th>
+                  <SortHeader label="When (UTC)" col="time" current={currentParams} />
+                  <SortHeader label="Event" col="event" current={currentParams} />
+                  <SortHeader label="Page" col="page" current={currentParams} />
                   <th className="text-left px-4 py-3 font-semibold">Location</th>
                   <th className="text-left px-4 py-3 font-semibold">Session</th>
                 </tr>
@@ -489,7 +644,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                 {events.length === 0 && (
                   <tr>
                     <td className="px-4 py-6 text-[#1A1A1A]/55 text-center" colSpan={5}>
-                      No events in this range yet.
+                      No events match this filter in the selected range.
                     </td>
                   </tr>
                 )}
@@ -541,7 +696,13 @@ function Stat({
   );
 }
 
-function RangePicker({ active }: { active: string }) {
+function RangePicker({
+  active,
+  current,
+}: {
+  active: string;
+  current: CurrentParams;
+}) {
   const ranges: { key: string; label: string }[] = [
     { key: '1h', label: '1 hour' },
     { key: '24h', label: '24 hours' },
@@ -555,7 +716,7 @@ function RangePicker({ active }: { active: string }) {
         return (
           <Link
             key={r.key}
-            href={`/dashboard?range=${r.key}`}
+            href={buildHref(current, { range: r.key })}
             className={`px-2.5 py-1 rounded-lg transition-colors ${
               isActive
                 ? 'bg-[#1F2A6D] text-white'
@@ -567,5 +728,36 @@ function RangePicker({ active }: { active: string }) {
         );
       })}
     </div>
+  );
+}
+
+function SortHeader({
+  label,
+  col,
+  current,
+  align = 'left',
+}: {
+  label: string;
+  col: string;
+  current: CurrentParams;
+  align?: 'left' | 'right';
+}) {
+  const isActive = (current.sort ?? 'time') === col;
+  const nextDir = isActive && current.dir === 'asc' ? 'desc' : 'asc';
+  const arrow = isActive ? (current.dir === 'asc' ? '▲' : '▼') : '';
+  return (
+    <th
+      className={`px-4 py-3 font-semibold ${align === 'right' ? 'text-right' : 'text-left'}`}
+    >
+      <Link
+        href={buildHref(current, { sort: col, dir: nextDir })}
+        className={`inline-flex items-center gap-1 hover:text-[#1F2A6D] ${
+          isActive ? 'text-[#1F2A6D]' : ''
+        }`}
+      >
+        {label}
+        <span className="text-[10px]">{arrow}</span>
+      </Link>
+    </th>
   );
 }
