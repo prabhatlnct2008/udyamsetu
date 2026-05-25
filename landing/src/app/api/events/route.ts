@@ -17,6 +17,8 @@ const ALLOWED_NAMES = new Set([
   'scroll_25_pct',
   'scroll_50_percent',
   'scroll_60_pct',
+  'dwell_30s',
+  'dwell_60s',
   'cta_click_primary',
   'cta_click_whatsapp',
   'form_field_focus',

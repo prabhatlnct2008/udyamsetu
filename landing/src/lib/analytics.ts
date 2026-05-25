@@ -24,6 +24,8 @@ export type OfferEventName =
   | 'scroll_25_pct'
   | 'scroll_50_percent'
   | 'scroll_60_pct'
+  | 'dwell_30s'
+  | 'dwell_60s'
   | 'cta_click_primary'
   | 'cta_click_whatsapp'
   | 'form_field_focus'
@@ -114,4 +116,31 @@ export function trackEvent(
     location,
     params,
   });
+}
+
+// Fires dwell_30s / dwell_60s based on time the page is actually VISIBLE
+// (a tab opened then backgrounded does not accumulate time). Returns a
+// cleanup function to call on unmount. Pure JS so it can be used from any
+// client component's useEffect.
+export function startDwellTracking(): () => void {
+  if (typeof window === 'undefined') return () => {};
+  let visibleMs = 0;
+  let fired30 = false;
+  let fired60 = false;
+
+  const interval = setInterval(() => {
+    if (document.visibilityState !== 'visible') return;
+    visibleMs += 1000;
+    if (!fired30 && visibleMs >= 30000) {
+      fired30 = true;
+      trackEvent('dwell_30s');
+    }
+    if (!fired60 && visibleMs >= 60000) {
+      fired60 = true;
+      trackEvent('dwell_60s');
+      clearInterval(interval);
+    }
+  }, 1000);
+
+  return () => clearInterval(interval);
 }
