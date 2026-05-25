@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { startDwellTracking, trackEvent } from '@/lib/analytics';
 
 // Page-level analytics for the AI Revenue Studio variants:
 //   - view_landing_page on mount
@@ -45,12 +45,15 @@ export default function AnalyticsBeacon() {
       }
     }
 
+    const stopDwell = startDwellTracking();
+
     window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('click', onClick);
     onScroll();
     return () => {
       window.removeEventListener('scroll', onScroll);
       document.removeEventListener('click', onClick);
+      stopDwell();
     };
   }, []);
 

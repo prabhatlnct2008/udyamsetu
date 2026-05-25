@@ -51,6 +51,8 @@ interface PageBreakdownRow {
   page: string;
   views: number;
   scroll60: number;
+  dwell30: number;
+  dwell60: number;
   fieldFocus: number;
   submits: number;
 }
@@ -196,9 +198,19 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       const count = Number(r.count ?? 0);
       const row =
         byPage.get(page) ??
-        { page, views: 0, scroll60: 0, fieldFocus: 0, submits: 0 };
+        {
+          page,
+          views: 0,
+          scroll60: 0,
+          dwell30: 0,
+          dwell60: 0,
+          fieldFocus: 0,
+          submits: 0,
+        };
       if (name === 'view_landing_page') row.views += count;
       else if (name === 'scroll_60_pct') row.scroll60 += count;
+      else if (name === 'dwell_30s') row.dwell30 += count;
+      else if (name === 'dwell_60s') row.dwell60 += count;
       else if (name === 'form_field_focus') row.fieldFocus += count;
       else if (name === 'form_submitted') row.submits += count;
       byPage.set(page, row);
@@ -330,12 +342,14 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             (v1 / v2 / v3) and the ₹19,500 offer page side by side.
           </p>
           <div className="mt-4 rounded-2xl bg-white border border-[#E9D8C3] overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
+            <table className="w-full text-sm min-w-[760px]">
               <thead className="bg-[#FFF6E8] text-[#1A1A1A]/65">
                 <tr>
                   <th className="text-left px-4 py-3 font-semibold">Page</th>
                   <th className="text-right px-4 py-3 font-semibold">Views</th>
                   <th className="text-right px-4 py-3 font-semibold">Scrolled 60%</th>
+                  <th className="text-right px-4 py-3 font-semibold">Dwell 30s</th>
+                  <th className="text-right px-4 py-3 font-semibold">Dwell 60s</th>
                   <th className="text-right px-4 py-3 font-semibold">Form focus</th>
                   <th className="text-right px-4 py-3 font-semibold">Submits</th>
                   <th className="text-right px-4 py-3 font-semibold">Conv. rate</th>
@@ -344,7 +358,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
               <tbody className="divide-y divide-[#E9D8C3]">
                 {pageRows.length === 0 && (
                   <tr>
-                    <td className="px-4 py-6 text-[#1A1A1A]/55 text-center" colSpan={6}>
+                    <td className="px-4 py-6 text-[#1A1A1A]/55 text-center" colSpan={8}>
                       No page events in this range yet.
                     </td>
                   </tr>
@@ -358,6 +372,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums">{p.views}</td>
                       <td className="px-4 py-3 text-right tabular-nums">{p.scroll60}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{p.dwell30}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{p.dwell60}</td>
                       <td className="px-4 py-3 text-right tabular-nums">{p.fieldFocus}</td>
                       <td className="px-4 py-3 text-right tabular-nums font-semibold">
                         {p.submits}

@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { trackEvent } from './tracking';
+import { startDwellTracking, trackEvent } from '@/lib/analytics';
 
 export default function ScrollEvents() {
   useEffect(() => {
     trackEvent('view_landing_page');
+    const stopDwell = startDwellTracking();
 
     let fired25 = false;
     let fired60 = false;
@@ -28,7 +29,10 @@ export default function ScrollEvents() {
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      stopDwell();
+    };
   }, []);
 
   return null;
