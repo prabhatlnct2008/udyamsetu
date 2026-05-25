@@ -1,3 +1,5 @@
+import { trackEvent } from '@/lib/analytics';
+
 export const WHATSAPP_NUMBER = '918882567801';
 export const WHATSAPP_DISPLAY = '+91 88825 67801';
 export const EMAIL = 'airevenuestudio@gmail.com';
@@ -44,26 +46,18 @@ export function validateIndianMobile(raw: string): boolean {
   return ten.length === 10 && /^[6-9]/.test(ten);
 }
 
-// Best-effort Meta Pixel Lead event. content_name distinguishes the A/B
-// variants so Ads Manager can report cost-per-lead per page.
+// Fires on successful form submit. content_name distinguishes the A/B
+// variants so Ads Manager (Meta Pixel Lead) and the internal dashboard
+// (/api/events form_submitted) can both report per-variant conversions.
 export function fireLeadPixel(contentName: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    (
-      window as unknown as {
-        fbq?: (c: string, n: string, p?: Record<string, unknown>) => void;
-      }
-    ).fbq?.('track', 'Lead', { content_name: contentName });
-  } catch {
-    // ignore
-  }
-  try {
-    (
-      window as unknown as {
-        gtag?: (c: string, n: string, p?: Record<string, unknown>) => void;
-      }
-    ).gtag?.('event', 'generate_lead', { content_name: contentName });
-  } catch {
-    // ignore
-  }
+  // Routes the conversion through the shared tracker: GA4 form_submitted +
+  // Meta Pixel Lead (with content_name so Ads Manager breaks down per
+  // variant) + internal /api/events form_submitted (page_path captured
+  // automatically).
+  trackEvent('form_submitted', { content_name: contentName });
+}
+
+// Fire once when the visitor first interacts with a form field/chip.
+export function fireFieldFocus(contentName: string): void {
+  trackEvent('form_field_focus', { content_name: contentName });
 }

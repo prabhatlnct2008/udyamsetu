@@ -47,6 +47,14 @@ interface CountRow {
   count: number;
 }
 
+interface PageBreakdownRow {
+  page: string;
+  views: number;
+  scroll60: number;
+  fieldFocus: number;
+  submits: number;
+}
+
 const FUNNEL_STEPS = [
   'view_landing_page',
   'scroll_25_pct',
@@ -99,6 +107,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
   let events: EventRow[] = [];
   let funnelCounts: Record<string, number> = {};
   let eventBreakdown: CountRow[] = [];
+  let pageRows: PageBreakdownRow[] = [];
   let dbError: string | null = null;
 
   try {
@@ -112,6 +121,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       leadsRows,
       eventsRows,
       eventsBreakdown,
+      eventsByPage,
     ] = await Promise.all([
       client.execute({
         sql: `SELECT COUNT(*) AS c FROM leads WHERE created_at >= ${sinceClause}`,
@@ -135,6 +145,12 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         sql: `SELECT name, COUNT(*) AS count FROM events
               WHERE created_at >= ${sinceClause}
               GROUP BY name ORDER BY count DESC`,
+        args: [],
+      }),
+      client.execute({
+        sql: `SELECT page_path, name, COUNT(*) AS count FROM events
+              WHERE created_at >= ${sinceClause} AND page_path IS NOT NULL
+              GROUP BY page_path, name`,
         args: [],
       }),
     ]);
@@ -171,6 +187,23 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     for (const b of breakdown) {
       funnelCounts[b.name] = b.count;
     }
+
+    // Pivot events-by-page into one row per page with the key funnel counts.
+    const byPage = new Map<string, PageBreakdownRow>();
+    for (const r of eventsByPage.rows) {
+      const page = String(r.page_path ?? '');
+      const name = String(r.name ?? '');
+      const count = Number(r.count ?? 0);
+      const row =
+        byPage.get(page) ??
+        { page, views: 0, scroll60: 0, fieldFocus: 0, submits: 0 };
+      if (name === 'view_landing_page') row.views += count;
+      else if (name === 'scroll_60_pct') row.scroll60 += count;
+      else if (name === 'form_field_focus') row.fieldFocus += count;
+      else if (name === 'form_submitted') row.submits += count;
+      byPage.set(page, row);
+    }
+    pageRows = Array.from(byPage.values()).sort((a, b) => b.views - a.views);
   } catch (err) {
     if (err instanceof TursoNotConfiguredError) {
       dbError =
@@ -277,6 +310,60 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-[#1A1A1A]/70">
                         {i === 0 ? '—' : `${drop.toFixed(1)}%`}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* By page / variant */}
+        <section className="mt-10">
+          <h2 className="text-xl font-semibold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+            By page (variant comparison)
+          </h2>
+          <p className="mt-1 text-sm text-[#1A1A1A]/65">
+            Views → engagement → submits per landing page in the{' '}
+            {range.label.toLowerCase()}. Compare the AI Revenue Studio variants
+            (v1 / v2 / v3) and the ₹19,500 offer page side by side.
+          </p>
+          <div className="mt-4 rounded-2xl bg-white border border-[#E9D8C3] overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]">
+              <thead className="bg-[#FFF6E8] text-[#1A1A1A]/65">
+                <tr>
+                  <th className="text-left px-4 py-3 font-semibold">Page</th>
+                  <th className="text-right px-4 py-3 font-semibold">Views</th>
+                  <th className="text-right px-4 py-3 font-semibold">Scrolled 60%</th>
+                  <th className="text-right px-4 py-3 font-semibold">Form focus</th>
+                  <th className="text-right px-4 py-3 font-semibold">Submits</th>
+                  <th className="text-right px-4 py-3 font-semibold">Conv. rate</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E9D8C3]">
+                {pageRows.length === 0 && (
+                  <tr>
+                    <td className="px-4 py-6 text-[#1A1A1A]/55 text-center" colSpan={6}>
+                      No page events in this range yet.
+                    </td>
+                  </tr>
+                )}
+                {pageRows.map((p) => {
+                  const cr = p.views > 0 ? (p.submits / p.views) * 100 : 0;
+                  return (
+                    <tr key={p.page}>
+                      <td className="px-4 py-3 font-mono text-xs text-[#1F2A6D]">
+                        {p.page}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums">{p.views}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{p.scroll60}</td>
+                      <td className="px-4 py-3 text-right tabular-nums">{p.fieldFocus}</td>
+                      <td className="px-4 py-3 text-right tabular-nums font-semibold">
+                        {p.submits}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums">
+                        {cr.toFixed(1)}%
                       </td>
                     </tr>
                   );

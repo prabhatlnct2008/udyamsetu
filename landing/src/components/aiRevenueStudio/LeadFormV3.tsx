@@ -7,6 +7,7 @@ import {
   HAS_SITE_OPTIONS,
   TIMELINE_OPTIONS,
   buildWhatsAppLink,
+  fireFieldFocus,
   fireLeadPixel,
   validateIndianMobile,
 } from '@/content/aiRevenueStudio';
@@ -24,6 +25,13 @@ export default function LeadFormV3() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [touched, setTouched] = useState(false);
+
+  function onFirstInteract() {
+    if (touched) return;
+    setTouched(true);
+    fireFieldFocus('v3_full_qualification');
+  }
 
   const firstName = name.trim().split(/\s+/)[0] ?? '';
   const waLink = buildWhatsAppLink(
@@ -84,24 +92,28 @@ export default function LeadFormV3() {
           options={BUSINESS_TYPES}
           value={businessType}
           onChange={setBusinessType}
+          onInteract={onFirstInteract}
         />
         <Question
           label="2 · Do you already have a website?"
           options={HAS_SITE_OPTIONS}
           value={hasSite}
           onChange={setHasSite}
+          onInteract={onFirstInteract}
         />
         <Question
           label="3 · When do you need it live?"
           options={TIMELINE_OPTIONS}
           value={timeline}
           onChange={setTimeline}
+          onInteract={onFirstInteract}
         />
         <Question
           label="4 · What's the main goal?"
           options={GOAL_OPTIONS}
           value={goal}
           onChange={setGoal}
+          onInteract={onFirstInteract}
         />
 
         <div className="grid sm:grid-cols-2 gap-3">
@@ -172,11 +184,13 @@ function Question({
   options,
   value,
   onChange,
+  onInteract,
 }: {
   label: string;
   options: string[];
   value: string;
   onChange: (v: string) => void;
+  onInteract?: () => void;
 }) {
   return (
     <fieldset>
@@ -187,7 +201,10 @@ function Question({
             key={o}
             label={o}
             selected={value === o}
-            onClick={() => onChange(o)}
+            onClick={() => {
+              onInteract?.();
+              onChange(o);
+            }}
           />
         ))}
       </div>

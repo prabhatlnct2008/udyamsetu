@@ -5,6 +5,7 @@ import {
   BUSINESS_TYPES,
   HAS_SITE_OPTIONS,
   buildWhatsAppLink,
+  fireFieldFocus,
   fireLeadPixel,
   validateIndianMobile,
 } from '@/content/aiRevenueStudio';
@@ -18,6 +19,13 @@ export default function LeadForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [touched, setTouched] = useState(false);
+
+  function onFirstInteract() {
+    if (touched) return;
+    setTouched(true);
+    fireFieldFocus('v1_two_question');
+  }
 
   const firstName = name.trim().split(/\s+/)[0] ?? '';
   const waLink = buildWhatsAppLink(
@@ -77,7 +85,10 @@ export default function LeadForm() {
                 key={b}
                 label={b}
                 selected={businessType === b}
-                onClick={() => setBusinessType(b)}
+                onClick={() => {
+                  onFirstInteract();
+                  setBusinessType(b);
+                }}
               />
             ))}
           </div>
@@ -93,7 +104,10 @@ export default function LeadForm() {
                 key={h}
                 label={h}
                 selected={hasSite === h}
-                onClick={() => setHasSite(h)}
+                onClick={() => {
+                  onFirstInteract();
+                  setHasSite(h);
+                }}
               />
             ))}
           </div>

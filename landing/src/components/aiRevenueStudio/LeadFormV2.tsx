@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 import {
   buildWhatsAppLink,
+  fireFieldFocus,
   fireLeadPixel,
   validateIndianMobile,
 } from '@/content/aiRevenueStudio';
@@ -13,6 +14,7 @@ export default function LeadFormV2() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [touched, setTouched] = useState(false);
 
   const waLink = buildWhatsAppLink(
     'Hi, I dropped my number for the ₹99 website sample',
@@ -65,6 +67,12 @@ export default function LeadFormV2() {
               autoFocus
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
+              onFocus={() => {
+                if (!touched) {
+                  setTouched(true);
+                  fireFieldFocus('v2_phone_only');
+                }
+              }}
               placeholder="WhatsApp number"
               autoComplete="tel"
               className="flex-1 px-4 py-4 bg-white text-lg text-[#0F172A] placeholder:text-slate-400 focus:outline-none"
