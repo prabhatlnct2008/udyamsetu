@@ -1,68 +1,74 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Header, Footer, CTAButtons, ModuleCard, PackageCard, FAQ } from '@/components';
 import SouthDelhiHubSection from '@/components/southDelhi/SouthDelhiHubSection';
+import { FEATURED_FAQ_ITEMS } from '@/content/faqs';
 
 export const metadata: Metadata = {
-  title: 'UdyamSetu Growth Studio - अपने बिज़नेस को Lead Machine बनाइए',
-  description: 'UdyamSetu आपके लिए एक पूरा सिस्टम बनाता है: 30–100 local landing pages + SEO foundation + safe brand mentions + backlinks/citations + Meta ads experiments + WhatsApp auto-replies',
+  title:
+    'UdyamSetu Growth Studio — Turn Your Business Into a Lead Machine',
+  description:
+    'We build a complete growth system for Indian businesses: 30–100 local landing pages + SEO foundation + safe brand mention engine + backlinks/citations + Meta ads experiments + WhatsApp auto-replies.',
+  alternates: {
+    canonical: 'https://udyamsetuai.in/landing-turn-your-business-into-lead-magnet',
+  },
 };
 
-export default function HinglishHome() {
+export default function Home() {
   return (
     <main className="min-h-screen bg-[#FFF6E8]">
-      <Header isHinglish />
+      <Header />
 
       {/* Hero Section */}
       <section className="warli-pattern relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F2A6D] leading-tight font-[family-name:var(--font-mukta)]">
-              अपने बिज़नेस को{' '}
-              <span className="text-[#FF8A00]">&quot;Lead Machine&quot;</span>{' '}
-              बनाइए
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F2A6D] leading-tight font-[family-name:var(--font-poppins)]">
+              Turn Your Business Into a{' '}
+              <span className="text-[#FF8A00]">Lead Machine</span>
               <br className="hidden md:block" />
-              — बिना भारी टीम हायर किए
+              — Without Hiring a Full Marketing Team
             </h1>
 
-            <p className="mt-6 text-lg md:text-xl text-[#1A1A1A]/80 max-w-3xl mx-auto font-[family-name:var(--font-mukta)]">
-              UdyamSetu आपके लिए एक पूरा सिस्टम बनाता है:
+            <p className="mt-6 text-lg md:text-xl text-[#1A1A1A]/80 max-w-3xl mx-auto">
+              We build a complete growth system for Indian businesses:
               <br />
-              <span className="font-semibold">30–100 local landing pages + SEO foundation + safe brand mentions + backlinks/citations + Meta ads experiments + WhatsApp auto-replies</span>
+              <span className="font-semibold">30–100 local landing pages + SEO foundation + safe brand mention engine + backlinks/citations + Meta ads experiments + WhatsApp auto-replies</span>
               <br />
-              मतलब: आप busy हों तब भी leads miss नहीं होंगी।
+              So you capture leads even when you&apos;re busy (clinic, puja, meetings, factory).
             </p>
 
             {/* Hero Bullets */}
             <div className="mt-8 flex flex-col md:flex-row justify-center gap-4 md:gap-8 text-left md:text-center">
               <div className="flex items-center gap-2">
                 <span className="text-[#1F7A3A] text-xl">⚡</span>
-                <span className="text-[#1A1A1A] font-[family-name:var(--font-mukta)]"><strong>7–14 दिन में launch:</strong> first pages + WhatsApp flow live</span>
+                <span className="text-[#1A1A1A]"><strong>Launch fast:</strong> first lead-ready pages in 7–14 days</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[#1F7A3A] text-xl">💬</span>
-                <span className="text-[#1A1A1A] font-[family-name:var(--font-mukta)]"><strong>WhatsApp-first system:</strong> reply seconds में, hours में नहीं</span>
+                <span className="text-[#1A1A1A]"><strong>WhatsApp-first:</strong> instant replies + qualification + lead routing</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="text-[#1A1A1A] font-[family-name:var(--font-mukta)]"><strong>Clear deliverables:</strong> &quot;marketing&quot; के नाम पर confusion नहीं</span>
+                <span className="text-[#1A1A1A]"><strong>Clear deliverables:</strong> no vague &quot;marketing&quot; promises</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="mt-10 flex justify-center">
-              <CTAButtons isHinglish size="large" />
+              <CTAButtons size="large" />
             </div>
 
             {/* Trust Strip */}
             <div className="mt-12 pt-8 border-t border-[#E9D8C3]">
-              <p className="text-sm text-[#1A1A1A]/60 mb-4 font-[family-name:var(--font-mukta)]">भारत भर के businesses हमपर भरोसा करते हैं</p>
-              <div className="flex flex-wrap justify-center gap-4 text-sm text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">क्लिनिक</span>
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">पंडित जी</span>
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">ट्यूटर</span>
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">मैन्युफैक्चरर</span>
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">सर्विस बिज़नेस</span>
-                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">प्रोफेशनल्स</span>
+              <p className="text-sm text-[#1A1A1A]/60 mb-4">Trusted by businesses across India</p>
+              <div className="flex flex-wrap justify-center gap-4 text-sm text-[#1F2A6D]">
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Local services</span>
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Clinics</span>
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Tutors</span>
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Manufacturers</span>
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Real estate</span>
+                <span className="px-3 py-1 bg-white rounded-full border border-[#E9D8C3]">Professionals</span>
               </div>
               <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs text-[#1A1A1A]/60">
                 <span>Delhi/NCR</span>
@@ -84,42 +90,87 @@ export default function HinglishHome() {
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              समस्या
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">The Pain We Solve</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              The Pain We Solve
             </h2>
-            <p className="mt-6 text-lg text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
-              अधिकतर एजेंसी बस <span className="text-[#FF8A00] font-semibold">एक website बना देती है और random पोस्ट डालती है।</span>
+            <p className="mt-6 text-lg text-[#1A1A1A]/80">
+              Most agencies do: <span className="text-[#FF8A00] font-semibold">&quot;1 website + random posts.&quot;</span>
             </p>
-            <p className="mt-4 text-lg text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
-              लेकिन lead आती है जब:
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              But leads actually come from:
             </p>
 
             <div className="mt-8 grid md:grid-cols-2 gap-4 text-left">
               <div className="flex items-start gap-3 p-4 bg-[#EEF1FF] rounded-xl">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="font-[family-name:var(--font-mukta)]">&quot;service + area&quot; वाला page मिलता है</span>
+                <span>Specific pages for specific intent (service + area + product + use-case)</span>
               </div>
               <div className="flex items-start gap-3 p-4 bg-[#EEF1FF] rounded-xl">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="font-[family-name:var(--font-mukta)]">WhatsApp पर तुरंत response होता है</span>
+                <span>Fast WhatsApp response (seconds, not hours)</span>
               </div>
               <div className="flex items-start gap-3 p-4 bg-[#EEF1FF] rounded-xl">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="font-[family-name:var(--font-mukta)]">ads और offer testing structured होता है</span>
+                <span>Structured experiments (ads + page A/B + offers)</span>
               </div>
               <div className="flex items-start gap-3 p-4 bg-[#EEF1FF] rounded-xl">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="font-[family-name:var(--font-mukta)]">business की presence कई जगह दिखती है (listings, citations, mentions)</span>
+                <span>Trusted presence (citations, directories, partner mentions, safe backlinks)</span>
               </div>
               <div className="flex items-start gap-3 p-4 bg-[#EEF1FF] rounded-xl md:col-span-2 md:max-w-md md:mx-auto">
                 <span className="text-[#1F7A3A] text-xl">✓</span>
-                <span className="font-[family-name:var(--font-mukta)]">content लगातार और useful होता है</span>
+                <span>Consistent content (not spam)</span>
               </div>
             </div>
 
-            <p className="mt-8 text-xl font-semibold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              <span className="text-[#FF8A00]">UdyamSetu</span> यही बनाता है।
+            <p className="mt-8 text-xl font-semibold text-[#1F2A6D]">
+              That&apos;s exactly what <span className="text-[#FF8A00]">UdyamSetu</span> builds.
+            </p>
+
+            <p className="mt-8 text-base text-[#1A1A1A]/80">
+              Looking for a specific service? See how we deliver an{' '}
+              <Link
+                href="/seo-company-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                SEO foundation
+              </Link>
+              ,{' '}
+              <Link
+                href="/ai-consulting-services-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                AI consulting roadmap
+              </Link>
+              ,{' '}
+              <Link
+                href="/digital-marketing-automation-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                marketing automation
+              </Link>
+              ,{' '}
+              <Link
+                href="/real-estate-lead-generation-south-delhi"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                real estate lead generation
+              </Link>
+              , or our{' '}
+              <Link
+                href="/nehru-place-okhla-b2b-ai-seo-growth-systems"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                Nehru Place &amp; Okhla B2B growth systems
+              </Link>
+              . Full FAQ at{' '}
+              <Link
+                href="/faqs"
+                className="text-[#1F2A6D] underline decoration-[#FF8A00]/40 hover:text-[#FF8A00] hover:decoration-[#FF8A00] transition-colors"
+              >
+                udyamsetuai.in/faqs
+              </Link>
+              .
             </p>
           </div>
         </div>
@@ -129,12 +180,11 @@ export default function HinglishHome() {
       <section id="modules" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              UdyamSetu Lead Engine
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">What We Build</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              What We Build: The UdyamSetu Lead Engine
             </h2>
-            <p className="mt-4 text-lg text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
-              Indian businesses के लिए designed complete growth system
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              A comprehensive growth system designed for Indian businesses
             </p>
           </div>
 
@@ -142,188 +192,178 @@ export default function HinglishHome() {
             <ModuleCard
               number={1}
               title="Landing Page Factory"
-              subtitle="Service × Area × Intent"
-              description="Website नहीं, search footprint बनता है।"
+              subtitle="Service × Location × Intent"
+              description="We don't build 'a website'. We build a search footprint."
               deliverables={[
-                '1 main site (mobile-first)',
-                '30–100 pages (plan के हिसाब से)',
-                'Services pages: जैसे "गृह प्रवेश पूजा", "root canal"',
-                'Area pages: जैसे "Saket", "Green Park", "Dwarka"',
-                'Product pages: manufacturing के लिए',
-                'Use-case pages: bulk/wholesale/emergency/24x7',
-                'हर page में Call + WhatsApp CTA',
-                'Offer block (price range / starting at)',
-                'Proof block (reviews, photos, cases)',
-                'FAQ block (Hindi/English mix)',
+                '1 main website (fast, mobile-first)',
+                '30 to 100 pages (based on plan)',
+                'Service pages (core offerings)',
+                'Location pages (e.g., Green Park, Saket, Dwarka)',
+                'Product pages (for manufacturers)',
+                'Use-case pages (bulk, wholesale, repair, emergency)',
+                'Click-to-call + WhatsApp CTA on every page',
+                'Offer block + proof block + FAQ block',
+                'Map embed / service area (where relevant)',
+                'Speed optimization (lightweight pages)',
               ]}
-              outcome="ज्यादा searches में visibility + ज्यादा enquiries"
+              outcome="Why this works: People search 'exactly what they want' + 'exactly where they want it.'"
               icon={<PagesIcon />}
-              isHinglish
             />
 
             <ModuleCard
               number={2}
-              title="WhatsApp Auto Reply"
-              subtitle="Busy हो तब भी lead संभले"
-              description="जब आप busy हों, तब भी leads handle होती हैं।"
+              title="WhatsApp Lead Automation"
+              subtitle="Never Miss Leads"
+              description="When you're busy, leads still get handled."
               deliverables={[
-                'Instant auto-reply (seconds में)',
-                'Qualification सवाल: कौन सी service चाहिए?',
-                'location/area? date/time?',
-                'photo/doc (ज़रूरत हो तो)',
-                'budget range (optional)',
-                'Lead routing: owner + staff + backup number',
-                'CRM-lite sheet: New / Follow-up / Booked / Closed',
-                '10–20 templates: price, availability, timings, FAQ, reschedule',
+                'Instant WhatsApp auto-reply within seconds',
+                'Qualification flow: service needed, location, date/time, budget range, photos/docs',
+                'Lead routing: owner + receptionist/team + backup number',
+                'Lead capture: Google Sheet / simple CRM pipeline with status',
+                '10–20 pre-approved reply templates (pricing, availability, FAQs, reschedule)',
               ]}
-              outcome="lead cold नहीं होती, conversion बढ़ता है"
+              note="Optional add-on: Appointment reminders + no-show reduction messages."
               icon={<WhatsAppModuleIcon />}
-              isHinglish
             />
 
             <ModuleCard
               number={3}
-              title="Brand Mention Engine"
-              subtitle="Safe, Semi-Automated"
-              description='"Comments scrape करके हर जगह spam" — ये risky है। हम safe तरीके से करते हैं: monitor + draft + approve + engage.'
+              title="Safe Brand Mention Engine"
+              subtitle="Automation + Approval"
+              description="We increase brand discovery without spam."
               deliverables={[
-                'Keyword monitoring: "best pandit", "dentist near me", "manufacturer wholesale"',
-                'AI drafts replies; approval ke baad post',
-                '200 / 500 / 1000 engagements per month',
-                'Weekly "Hot Conversations" list',
-                'Tracking links (UTM) ताकि पता चले traffic/leads कहाँ से आए',
+                'Monitoring: keywords, competitor mentions, problem statements',
+                'Drafting: AI creates reply drafts in your voice',
+                'Tracking: weekly engagement + click reports',
+                'Human-in-loop: You/our team approves before posting',
+                '200 / 500 / 1000 engagements per month (by package)',
+                'Weekly "Hot Conversations" list (best lead opportunities)',
+                'UTM tracked links to measure traffic/leads',
               ]}
-              outcome="brand discovery, trust, aur branded searches बढ़ते हैं"
+              note="Reality check: Social mentions don't magically 'rank' you, but they increase branded searches, referral traffic, trust, and conversions."
               icon={<MegaphoneIcon />}
-              isHinglish
             />
 
             <ModuleCard
               number={4}
               title="Backlink + Citations Engine"
-              subtitle="SEO की नींव"
-              description="लंबी term SEO success के लिए foundation layer।"
+              subtitle="SEO Credibility"
+              description="This is the foundation layer for long-term SEO success."
               deliverables={[
-                'Local listings/citations (industry + city relevant)',
-                'Partner outreach: vendors, associations, venues, RWAs',
-                'Guest post draft + outreach (placement publisher pe depend)',
-                'Monthly link report + inventory',
+                'Local citations/listings (niche + city relevant)',
+                'Partner outreach for "real" mentions (vendors, RWAs, venues, associations)',
+                'Guest post drafting + outreach (placements depend on publisher response)',
+                'Link inventory + monthly report',
               ]}
-              note="हम spam backlinks नहीं करते।"
+              note="Important: We don't do risky backlink spam or '1000 links for ₹X'."
               icon={<LinkIcon />}
-              isHinglish
             />
 
             <ModuleCard
               number={5}
               title="Meta Ads Experiments"
               subtitle="Optional"
-              description="Boost post नहीं — proper experiments।"
+              description="We run ads like an engineering system, not gambling."
               deliverables={[
-                'Pixel + event tracking setup',
-                '2–4 experiments/month: creative test, audience test, offer test, landing page test',
+                'Tracking setup: Pixel + events + conversions',
+                '2–4 experiments/month: Creative test, audience test, offer test, landing page test',
                 'Weekly optimization',
                 'Creative refresh plan',
               ]}
-              note="Ad spend client pay करेगा।"
+              note="Note: Ad spend is paid directly by the client."
               icon={<AdsIcon />}
-              isHinglish
             />
           </div>
         </div>
       </section>
 
-      <SouthDelhiHubSection isHinglish />
+      <SouthDelhiHubSection />
 
       {/* Packages Section */}
       <section id="packages" className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              पैकेज
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">Packages</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              Packages
             </h2>
-            <p className="mt-4 text-lg text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
-              Simple + capped — आपके business के लिए सही package चुनें
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              Clear, capped, and scalable — choose what fits your business
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <PackageCard
-              name='A) "Launch Sprint"'
-              subtitle="One-time"
+              name='Package A — "Launch Sprint"'
+              subtitle="One-Time Setup"
               bestFor="Fast lead-ready launch"
               setupIncludes={[
                 '1 main site',
                 '30 landing pages',
-                'GA4 + Search Console + Pixel setup',
-                'WhatsApp CTA + lead sheet',
+                'Tracking setup: GA4 + Search Console + Pixel',
+                'WhatsApp CTA integration + basic lead sheet',
               ]}
               mrpSetup="₹35,000 – ₹50,000"
               launchSetup="₹14,000 – ₹20,000"
-              isHinglish
             />
 
             <PackageCard
-              name='B) "WhatsApp Lead System"'
+              name='Package B — "WhatsApp Lead System"'
               subtitle="Setup + Monthly"
               bestFor="Clinics, professionals, services"
               setupIncludes={[
-                '1 site + 25 pages',
+                '1 main site + 25 pages',
                 'WhatsApp automation + qualification + routing',
                 'CRM-lite pipeline',
               ]}
               monthlyIncludes={[
-                'automation tuning + reporting',
-                '2 page improvements/month',
+                'Automation tuning + reporting',
+                '2 page optimizations/month',
               ]}
               mrpSetup="₹50,000"
               mrpMonthly="₹20,000"
               launchSetup="₹20,000"
               launchMonthly="₹8,000"
-              isHinglish
               featured
             />
 
             <PackageCard
-              name='C) "SEO + Brand Growth"'
+              name='Package C — "SEO + Brand Growth"'
               subtitle="Monthly Compounding"
               bestFor="Long-term inbound"
               setupIncludes={[
-                '1 site + 50 pages',
+                '1 main site + 50 pages (services + locations)',
                 'SEO structure + content calendar',
               ]}
               monthlyIncludes={[
                 '12–20 posts/month',
                 '4 SEO pages/blogs/month',
-                'Brand mentions: 500 engagements/month',
-                'Citations/links: 20–40/month',
+                'Brand Mention Engine: 500 engagements/month',
+                'Citations/links: 20–40/month + partner outreach',
               ]}
               mrpSetup="₹60,000"
               mrpMonthly="₹30,000"
               launchSetup="₹24,000"
               launchMonthly="₹12,000"
-              isHinglish
             />
 
             <PackageCard
-              name='D) "Ads + Conversion System"'
+              name='Package D — "Ads + Conversion System"'
               subtitle="Performance-Lite"
               bestFor="Faster results with controlled spend"
               setupIncludes={[
                 '10 conversion landing pages',
-                'Tracking + WhatsApp flow',
+                'Pixel + events + lead tracking',
+                'WhatsApp lead flow',
               ]}
               monthlyIncludes={[
                 '2–4 ad experiments/month',
-                'Weekly optimization',
-                '6–10 creatives/month',
+                'Weekly optimizations',
+                'Creative refresh: 6–10 creatives/month',
               ]}
               mrpSetup="₹60,000"
               mrpMonthly="₹30,000"
               launchSetup="₹24,000"
               launchMonthly="₹12,000"
-              isHinglish
             />
           </div>
         </div>
@@ -333,36 +373,38 @@ export default function HinglishHome() {
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              Deliverables Caps
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">Scope clear</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              What You Get
             </h2>
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              Hard deliverables + clear caps to keep it clean and scalable
+            </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
             <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
               <div className="text-3xl font-bold text-[#FF8A00]">25-100</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Pages (plan-based)</div>
+              <div className="text-[#1A1A1A]/80 mt-2">Pages included (plan-based)</div>
             </div>
             <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
               <div className="text-3xl font-bold text-[#FF8A00]">2</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Revisions rounds</div>
+              <div className="text-[#1A1A1A]/80 mt-2">Revision rounds per page set</div>
             </div>
             <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
               <div className="text-3xl font-bold text-[#FF8A00]">24-48h</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Change requests response</div>
+              <div className="text-[#1A1A1A]/80 mt-2">Response time for changes</div>
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
+              <div className="text-3xl font-bold text-[#FF8A00]">10-20</div>
+              <div className="text-[#1A1A1A]/80 mt-2">WhatsApp script templates</div>
             </div>
             <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
               <div className="text-3xl font-bold text-[#FF8A00]">200-1000</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Brand engagements/month</div>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
-              <div className="text-3xl font-bold text-[#FF8A00]">20-40</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Citations/month</div>
+              <div className="text-[#1A1A1A]/80 mt-2">Brand engagements/month</div>
             </div>
             <div className="bg-white p-6 rounded-xl border border-[#E9D8C3] text-center">
               <div className="text-3xl font-bold text-[#FF8A00]">2-4</div>
-              <div className="text-[#1A1A1A]/80 mt-2 font-[family-name:var(--font-mukta)]">Ads experiments/month</div>
+              <div className="text-[#1A1A1A]/80 mt-2">Ad experiments/month</div>
             </div>
           </div>
         </div>
@@ -372,10 +414,12 @@ export default function HinglishHome() {
       <section id="how-it-works" className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              कैसे काम करता है
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">Timeline</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              How It Works
             </h2>
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              From intake to launch — a clear timeline
+            </p>
           </div>
 
           <div className="max-w-3xl mx-auto">
@@ -388,28 +432,24 @@ export default function HinglishHome() {
                 <TimelineItem
                   day="Day 1–2"
                   title="Business Intake"
-                  description="services + areas + offers + proof (reviews/photos)"
-                  isHinglish
+                  description="Services + locations + offers + proof collection"
                 />
                 <TimelineItem
                   day="Day 3–6"
                   title="Setup Phase"
-                  description="page structure + copy + design setup"
+                  description="Page architecture + copy + design setup"
                   isRight
-                  isHinglish
                 />
                 <TimelineItem
                   day="Day 7–14"
                   title="Go Live"
-                  description="first pages live + tracking + WhatsApp flow live"
-                  isHinglish
+                  description="First batch live + tracking + WhatsApp flow live"
                 />
                 <TimelineItem
                   day="Week 3+"
-                  title="Monthly Loop"
-                  description="monthly improvement loop"
+                  title="Growth Loops"
+                  description="Monthly growth loops (content, mentions, links, ads tests)"
                   isRight
-                  isHinglish
                 />
               </div>
             </div>
@@ -421,10 +461,12 @@ export default function HinglishHome() {
       <section id="reporting" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
               Reporting
-              <span className="block text-lg font-normal text-[#1A1A1A]/60 mt-2">WhatsApp-friendly</span>
             </h2>
+            <p className="mt-4 text-lg text-[#1A1A1A]/80">
+              Simple, WhatsApp-friendly reports you can actually use
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -433,24 +475,24 @@ export default function HinglishHome() {
                 <div className="w-10 h-10 bg-[#FF8A00]/10 rounded-lg flex items-center justify-center">
                   <span className="text-[#FF8A00] text-xl">📅</span>
                 </div>
-                <h3 className="text-xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">Weekly</h3>
+                <h3 className="text-xl font-bold text-[#1F2A6D]">Weekly Snapshot</h3>
               </div>
-              <ul className="space-y-2 text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
+              <ul className="space-y-2 text-[#1A1A1A]/80">
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>leads</span>
+                  <span>Leads received</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>best pages</span>
+                  <span>WhatsApp completion rate</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>WhatsApp drop-off</span>
+                  <span>Best pages by clicks</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>next actions</span>
+                  <span>Ad performance (if running)</span>
                 </li>
               </ul>
             </div>
@@ -460,24 +502,24 @@ export default function HinglishHome() {
                 <div className="w-10 h-10 bg-[#1F7A3A]/10 rounded-lg flex items-center justify-center">
                   <span className="text-[#1F7A3A] text-xl">📊</span>
                 </div>
-                <h3 className="text-xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">Monthly</h3>
+                <h3 className="text-xl font-bold text-[#1F2A6D]">Monthly Report</h3>
               </div>
-              <ul className="space-y-2 text-[#1A1A1A]/80 font-[family-name:var(--font-mukta)]">
+              <ul className="space-y-2 text-[#1A1A1A]/80">
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>pages added</span>
+                  <span>Pages added</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>citations</span>
+                  <span>Citations/links added</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>mentions</span>
+                  <span>Engagement/mentions summary</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#1F7A3A]">•</span>
-                  <span>results + next plan</span>
+                  <span>Next month priorities</span>
                 </li>
               </ul>
             </div>
@@ -489,29 +531,26 @@ export default function HinglishHome() {
       <section id="faqs" className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-mukta)]">
-              FAQs
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              Frequently asked questions
             </h2>
+            <p className="mt-3 text-[#1A1A1A]/70">
+              A few common questions South Delhi business owners ask us. The full library has 50.
+            </p>
           </div>
 
           <div className="max-w-3xl mx-auto">
-            <FAQ
-              isHinglish
-              items={[
-                {
-                  question: 'SEO guarantee?',
-                  answer: 'Guarantee नहीं—deliverables guarantee है। Competition पर depend करता है।',
-                },
-                {
-                  question: 'Brand mentions automation safe है?',
-                  answer: 'Full autoposting risky है। हम approval-based approach रखते हैं।',
-                },
-                {
-                  question: 'Backlinks automated हो सकते हैं?',
-                  answer: 'Prospecting/outreach/monitoring automate हो सकता है। Links "earn" होते हैं, spam नहीं।',
-                },
-              ]}
-            />
+            <FAQ items={FEATURED_FAQ_ITEMS} />
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/faqs"
+              className="inline-flex items-center gap-2 border-2 border-[#1F2A6D] text-[#1F2A6D] hover:bg-[#EEF1FF] px-6 py-3 rounded-xl font-semibold transition-all duration-200"
+            >
+              <span>See all 50 FAQs</span>
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -519,45 +558,70 @@ export default function HinglishHome() {
       {/* Final CTA Section */}
       <section className="py-16 md:py-24 bg-[#1F2A6D] warli-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white font-[family-name:var(--font-mukta)]">
-            WhatsApp पर &quot;PLAN&quot; भेजिए
+          <h2 className="text-3xl md:text-4xl font-bold text-white font-[family-name:var(--font-poppins)]">
+            Get a Free Growth Plan in 15 minutes
           </h2>
-          <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto font-[family-name:var(--font-mukta)]">
-            हम आपके लिए free growth plan बनाएँगे:
+          <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto">
+            We&apos;ll tell you:
           </p>
-          <ul className="mt-6 space-y-2 text-white/80 font-[family-name:var(--font-mukta)]">
-            <li>• कितने pages चाहिए</li>
-            <li>• कौन से areas target करने हैं</li>
-            <li>• WhatsApp flow में कौन से सवाल convert करेंगे</li>
-            <li>• कौन सा package best है</li>
+          <ul className="mt-6 space-y-2 text-white/80">
+            <li>• How many pages you need</li>
+            <li>• Which locations to target</li>
+            <li>• What WhatsApp questions convert best</li>
+            <li>• Which package fits your budget</li>
           </ul>
 
           <a
             href="https://wa.me/918882567801?text=PLAN"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-10 inline-flex items-center gap-3 bg-[#FF8A00] hover:bg-[#F57C00] text-white px-10 py-5 rounded-xl font-bold text-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-1 font-[family-name:var(--font-mukta)]"
+            className="mt-10 inline-flex items-center gap-3 bg-[#FF8A00] hover:bg-[#F57C00] text-white px-10 py-5 rounded-xl font-bold text-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-1"
           >
             <WhatsAppLargeIcon />
-            <span>WhatsApp &quot;PLAN&quot;</span>
+            <span>WhatsApp &quot;PLAN&quot; to Get Started</span>
           </a>
         </div>
       </section>
 
-      <Footer isHinglish />
+      {/* FAQ teaser banner (links to full /faqs page) */}
+      <section className="py-12 md:py-16 bg-[#FFF6E8] border-t border-[#E9D8C3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+              Still have questions?
+            </h2>
+            <p className="mt-3 text-[#1A1A1A]/80">
+              50 practical answers for South Delhi businesses — websites,
+              local SEO, Google Business Profile, lead generation, WhatsApp
+              follow-up, AI automation, and growth.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Link
+                href="/faqs"
+                className="inline-flex items-center gap-2 bg-[#1F2A6D] hover:bg-[#2a3580] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+              >
+                <span>Browse all 50 FAQs</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </main>
   );
 }
 
 // Timeline Item Component
-function TimelineItem({ day, title, description, isRight = false, isHinglish = false }: { day: string; title: string; description: string; isRight?: boolean; isHinglish?: boolean }) {
+function TimelineItem({ day, title, description, isRight = false }: { day: string; title: string; description: string; isRight?: boolean }) {
   return (
     <div className={`relative flex items-center ${isRight ? 'md:flex-row-reverse' : ''}`}>
       <div className="absolute left-4 w-3 h-3 bg-[#FF8A00] rounded-full border-4 border-[#FFF6E8] md:left-1/2 md:-translate-x-1.5"></div>
       <div className={`ml-12 md:ml-0 md:w-1/2 ${isRight ? 'md:pl-8' : 'md:pr-8 md:text-right'}`}>
         <span className="text-[#FF8A00] font-semibold">{day}</span>
-        <h3 className={`text-xl font-bold text-[#1F2A6D] mt-1 ${isHinglish ? 'font-[family-name:var(--font-mukta)]' : ''}`}>{title}</h3>
-        <p className={`text-[#1A1A1A]/80 mt-1 ${isHinglish ? 'font-[family-name:var(--font-mukta)]' : ''}`}>{description}</p>
+        <h3 className="text-xl font-bold text-[#1F2A6D] mt-1">{title}</h3>
+        <p className="text-[#1A1A1A]/80 mt-1">{description}</p>
       </div>
     </div>
   );

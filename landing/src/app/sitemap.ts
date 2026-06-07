@@ -6,7 +6,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_ORIGIN}/`, lastModified, changeFrequency: 'weekly', priority: 1 },
-    { url: `${SITE_ORIGIN}/hi`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
+    {
+      url: `${SITE_ORIGIN}/landing-turn-your-business-into-lead-magnet`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_ORIGIN}/landing-turn-your-business-into-lead-magnet-hindi`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     {
       url: `${SITE_ORIGIN}/portfolio`,
       lastModified,

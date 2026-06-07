@@ -34,7 +34,7 @@ export default function Header({ isHinglish = false }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href={isHinglish ? '/hi' : '/'} className="flex items-center">
+          <Link href="/" className="flex items-center">
             <span className="text-2xl font-bold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
               UdyamSetu
             </span>
@@ -56,7 +56,7 @@ export default function Header({ isHinglish = false }: HeaderProps) {
           {/* Language Toggle + CTA */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
-              href={isHinglish ? '/' : '/hi'}
+              href={isHinglish ? '/landing-turn-your-business-into-lead-magnet' : '/landing-turn-your-business-into-lead-magnet-hindi'}
               className="text-[#1F2A6D] hover:text-[#FF8A00] font-medium transition-colors text-sm"
             >
               {isHinglish ? 'English' : 'हिंदी'}
@@ -109,7 +109,7 @@ export default function Header({ isHinglish = false }: HeaderProps) {
               ))}
               <div className="flex items-center gap-4 pt-4 border-t border-[#E9D8C3]">
                 <Link
-                  href={isHinglish ? '/' : '/hi'}
+                  href={isHinglish ? '/landing-turn-your-business-into-lead-magnet' : '/landing-turn-your-business-into-lead-magnet-hindi'}
                   className="text-[#1F2A6D] hover:text-[#FF8A00] font-medium"
                 >
                   {isHinglish ? 'English' : 'हिंदी'}
