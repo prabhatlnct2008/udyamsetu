@@ -72,7 +72,7 @@ export default function Footer({ isHinglish = false }: FooterProps) {
               ))}
               <li>
                 <Link
-                  href={isHinglish ? '/' : '/hi'}
+                  href={isHinglish ? '/landing-turn-your-business-into-lead-magnet' : '/landing-turn-your-business-into-lead-magnet-hindi'}
                   className="text-white/80 hover:text-[#FF8A00] transition-colors"
                 >
                   {isHinglish ? 'English Version' : 'हिंदी Version'}
