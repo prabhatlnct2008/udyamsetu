@@ -186,7 +186,10 @@ export default function AgenticAIFieldGuide() {
         <article className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-[#1A1A1A]">
           {/* HERO */}
           <header className="mb-12">
-            <h1 className="text-3xl md:text-5xl font-bold text-[#1F2A6D] leading-tight font-[family-name:var(--font-poppins)]">
+            <p className="text-xs font-semibold text-[#FF8A00] uppercase tracking-[0.2em]">
+              Agentic AI · Field Guide
+            </p>
+            <h1 className="mt-3 text-3xl md:text-5xl font-bold text-[#1F2A6D] leading-tight font-[family-name:var(--font-poppins)]">
               Before you pick a tool, read this
             </h1>
             <p className="mt-4 italic text-lg text-[#1A1A1A]/75">
@@ -878,13 +881,6 @@ export default function AgenticAIFieldGuide() {
             ))}
           </dl>
 
-          <hr className="my-12 border-[#E9D8C3]" />
-
-          <p className="my-6 text-sm italic text-[#1A1A1A]/55">
-            Last reviewed: mid-2026. The tool tables move fast — recheck the
-            pricing and the &ldquo;doing well / dying&rdquo; calls every few
-            months or this page rots.
-          </p>
         </article>
       </main>
     </>

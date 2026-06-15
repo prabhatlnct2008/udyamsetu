@@ -99,6 +99,7 @@ export default function HomePage() {
             <a href="#templates" className="hover:text-[#1F2A6D]">Templates</a>
             <a href="#hosting" className="hover:text-[#1F2A6D]">Hosting</a>
             <a href="#rescue" className="hover:text-[#1F2A6D]">Rescue</a>
+            <Link href="/agentic-ai" className="hover:text-[#1F2A6D]">Field guide</Link>
             <a href="#how-it-works" className="hover:text-[#1F2A6D]">How it works</a>
             <a href="#faq" className="hover:text-[#1F2A6D]">FAQs</a>
           </nav>
@@ -723,7 +724,23 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
+          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <Link
+              href="/agentic-ai"
+              className="rounded-2xl bg-[#FFF6E8] border border-[#E9D8C3] p-5 hover:border-[#1F2A6D] transition-colors"
+            >
+              <p className="font-semibold text-[#1F2A6D] font-[family-name:var(--font-poppins)]">
+                Before you pick a tool, read this
+              </p>
+              <p className="mt-2 text-sm text-[#1A1A1A]/75">
+                A plain field guide to AI agents — brain, wiring, memory,
+                knowledge, hands, and the watching, with 2026 tool
+                comparisons. No selling.
+              </p>
+              <span className="mt-3 inline-block text-sm font-semibold text-[#1F2A6D]">
+                Read the guide →
+              </span>
+            </Link>
             <Link
               href="/landing-turn-your-business-into-lead-magnet"
               className="rounded-2xl bg-[#FFF6E8] border border-[#E9D8C3] p-5 hover:border-[#1F2A6D] transition-colors"
@@ -821,6 +838,11 @@ export default function HomePage() {
               <a href="#rescue" className="hover:text-[#FF8A00]">
                 Rescue audit
               </a>
+            </li>
+            <li>
+              <Link href="/agentic-ai" className="hover:text-[#FF8A00]">
+                AI agent field guide
+              </Link>
             </li>
             <li>
               <a href="#services" className="hover:text-[#FF8A00]">
